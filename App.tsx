@@ -8,12 +8,12 @@ import Navigator from '@navigation/Navigator';
 import {ROUTES} from '@constants/index';
 
 function App(): React.JSX.Element {
-  
+
   const linking: LinkingOptions<DrawerScreenParamList> = {
     prefixes: ['taskwave://', 'taskwave://boards'],
     config: {
       screens: {
-        [ROUTES.Drawer.BOARDS]: {
+        [ROUTES.DRAWER.BOARDS]: {
           screens: {
             [ROUTES.BOARDS_STACK_SCREEN.BOARDS_SCREEN]: 'boards',
             [ROUTES.BOARDS_STACK_SCREEN.ADD_BOARD_SCREEN]: 'add-board',
@@ -29,8 +29,8 @@ function App(): React.JSX.Element {
             },
           },
         },
-        [ROUTES.Drawer.CARDS]: 'cards',
-        [ROUTES.Drawer.SETTINGS]: 'settings',
+        [ROUTES.DRAWER.CARDS]: 'cards',
+        [ROUTES.DRAWER.SETTINGS]: 'settings',
       },
     },
   };

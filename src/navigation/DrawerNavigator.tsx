@@ -14,11 +14,11 @@ const DrawerNavigator = () => {
         headerShown: false,
       }}>
       <Drawer.Screen
-        name={ROUTES.Drawer.BOARDS}
+        name={ROUTES.DRAWER.BOARDS}
         component={BoardsStackScreen}
       />
-      <Drawer.Screen name={ROUTES.Drawer.CARDS} component={MyCards} />
-      <Drawer.Screen name={ROUTES.Drawer.SETTINGS} component={Settings} />
+      <Drawer.Screen name={ROUTES.DRAWER.CARDS} component={MyCards} />
+      <Drawer.Screen name={ROUTES.DRAWER.SETTINGS} component={Settings} />
     </Drawer.Navigator>
   );
 };

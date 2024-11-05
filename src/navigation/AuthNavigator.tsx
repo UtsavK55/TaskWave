@@ -11,7 +11,7 @@ const AuthNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <AuthStack.Screen name={ROUTES.Auth.LOGIN} component={Login} />
+      <AuthStack.Screen name={ROUTES.AUTH.LOGIN} component={Login} />
     </AuthStack.Navigator>
   );
 };

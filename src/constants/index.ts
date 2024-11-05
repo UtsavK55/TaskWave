@@ -4,8 +4,8 @@ export const STORAGE_KEYS = {
 };
 
 export const ROUTES = {
-  Auth: {LOGIN: 'LOGIN'},
-  Drawer: {
+  AUTH: {LOGIN: 'LOGIN'},
+  DRAWER: {
     BOARDS: 'BOARDS',
     CARDS: 'CARDS',
     SETTINGS: 'SETTINGS',
