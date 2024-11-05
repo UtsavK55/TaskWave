@@ -7,7 +7,7 @@ import CardDetails from '@screens/cardDetails/CardDetails';
 import Lists from '@screens/lists/Lists';
 import Notification from '@screens/notification/Notification';
 import Search from '@screens/search/Search';
-import {ROUTES} from '@constants/index';
+import {ROUTES} from '@constants';
 
 const BoardsStackScreen = () => {
   const BoardsStack = createNativeStackNavigator<BoardsScreenParamList>();

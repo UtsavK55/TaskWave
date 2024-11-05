@@ -5,7 +5,7 @@ import Toast from 'react-native-toast-message';
 import {UserLoginProvider} from '@contexts/Loginprovider';
 import ThemeProvider from '@contexts/ThemeProvider/ThemeProvider';
 import Navigator from '@navigation/Navigator';
-import {ROUTES} from '@constants/index';
+import {ROUTES} from '@constants';
 
 function App(): React.JSX.Element {
 
