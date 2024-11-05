@@ -1,0 +1,24 @@
+export const STORAGE_KEYS = {
+  TOKEN: 'token',
+  DARK_MODE: 'darkMode',
+};
+
+export const ROUTES = {
+  Auth: {LOGIN: 'LOGIN'},
+  Drawer: {
+    BOARDS: 'BOARDS',
+    CARDS: 'CARDS',
+    SETTINGS: 'SETTINGS',
+  },
+  BOARDS_STACK_SCREEN: {
+    BOARDS_SCREEN: 'BOARDS_SCREEN',
+    LISTS_SCREEN: 'LISTS_SCREEN',
+    CARD_DETAILS_SCREEN: 'CARD_DETAILS_SCREEN',
+    ADD_BOARD_SCREEN: 'ADD_BOARD_SCREEN',
+    SEARCH_SCREEN: 'SEARCH_SCREEN',
+    NOTIFICATION_SCREEN: 'NOTIFICATION_SCREEN',
+    SETTINGS_SCREEN: 'SETTINGS_SCREEN',
+  },
+} as const;
+
+export const tokenRegex = /#token=([A-Za-z0-9]+)/;
