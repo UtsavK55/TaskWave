@@ -5,8 +5,8 @@ import DrawerNavigator from '@navigation/DrawerNavigator';
 import AuthNavigator from '@navigation/AuthNavigator';
 import ShowToast from '@components/showToast';
 import {useUserLoginContext} from '@contexts/Loginprovider';
-import {STORAGE_KEYS, tokenRegex} from '@constants/index';
-import {storeData} from '@storage/index';
+import {STORAGE_KEYS, tokenRegex} from '@constants';
+import {storeData} from '@storage';
 
 const Navigator = () => {
   const {token, setToken} = useUserLoginContext();

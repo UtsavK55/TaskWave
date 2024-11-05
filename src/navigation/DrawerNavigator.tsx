@@ -1,6 +1,6 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import {ROUTES} from '@constants/index';
+import {ROUTES} from '@constants';
 import BoardsStackScreen from '@navigation/BoardsStackScreen';
 import MyCards from '@screens/myCards/MyCards';
 import Settings from '@screens/settings/Settings';

@@ -1,4 +1,4 @@
-import {ROUTES} from '@constants/index';
+import {ROUTES} from '@constants';
 
 declare global {
   type AuthScreenNames = keyof typeof ROUTES.AUTH;
