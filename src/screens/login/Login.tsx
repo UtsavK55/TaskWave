@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, Linking, Text, TouchableOpacity, View} from 'react-native';
 
 import ShowToast from '@components/showToast';
-import {logoImg} from '@constants';
+import {IMAGES} from '@constants';
 import useTheme from '@hooks/useTheme';
 import {loginUrl} from '@network/apiUrls';
 
@@ -31,7 +31,11 @@ const Login = () => {
       <View style={gutters.marginHorizontal_12}>
         <Text style={styles.welcomeTitle}>Welcome To</Text>
         <View style={styles.imageContainer}>
-          <Image source={logoImg} resizeMode="contain" style={styles.image} />
+          <Image
+            source={IMAGES.logoImg}
+            resizeMode="contain"
+            style={styles.image}
+          />
         </View>
         <Text style={styles.appTitle}>TaskWave</Text>
       </View>

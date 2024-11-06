@@ -25,8 +25,10 @@ export const ROUTES = {
 
 export const tokenRegex = /#token=([A-Za-z0-9]+)/;
 
-export const logoImg = require('@assets/logo.png');
-export const titleImg = require('@assets/taskWave.png');
+export const IMAGES = {
+  logoImg: require('@assets/logo.png'),
+  titleImg: require('@assets/taskWave.png'),
+};
 
 export const {width: windowWidth, height: windowHeight} =
   Dimensions.get('window');

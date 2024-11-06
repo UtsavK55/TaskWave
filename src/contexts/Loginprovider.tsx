@@ -26,6 +26,7 @@ export const UserLoginProvider: React.FC<{children: ReactNode}> = ({
     const token = await getData(STORAGE_KEYS.TOKEN);
     setToken(token || '');
   };
+  
   useEffect(() => {
     fetchUsers();
   }, []);
