@@ -12,3 +12,12 @@ const useTheme = () => {
 };
 
 export default useTheme;
+
+export const createThemedStyles = (
+  styleFunction: (theme: ThemeContext) => Record<string, any>,
+) => {
+  return () => {
+    const theme = useTheme();
+    return styleFunction(theme);
+  };
+};

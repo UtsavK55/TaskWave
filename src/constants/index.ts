@@ -1,3 +1,5 @@
+import {Dimensions} from 'react-native';
+
 export const STORAGE_KEYS = {
   TOKEN: 'token',
   DARK_MODE: 'darkMode',
@@ -22,3 +24,9 @@ export const ROUTES = {
 } as const;
 
 export const tokenRegex = /#token=([A-Za-z0-9]+)/;
+
+export const logoImg = require('@assets/logo.png');
+export const titleImg = require('@assets/taskWave.png');
+
+export const {width: windowWidth, height: windowHeight} =
+  Dimensions.get('window');
