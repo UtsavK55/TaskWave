@@ -10,26 +10,23 @@ import {useColorScheme} from 'react-native';
 
 import {STORAGE_KEYS} from '@constants';
 import {getData, storeData} from '@storage';
-
-import generateConfig from '@theme/generateConfig';
-import {generateBackgrounds} from '@theme/backgrounds';
+import layout from '@theme/layout';
 import {
+  generateBackgrounds,
   generateBorderColors,
   generateBorderRadius,
   generateBorderWidths,
-} from '@theme/borders';
-import {
+  generateConfig,
   generateFontColors,
   generateFontSizes,
+  generateGutters,
   staticFontStyles,
-} from '@theme/fonts';
-import {generateGutters, staticGutterStyles} from '@theme/gutters';
-import layout from '@theme/layout';
+  staticGutterStyles,
+} from '@helpers/styleHelpers';
 
 export const ThemeContext = createContext<ThemeContext | undefined>(undefined);
 
 const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
-  
   const colorScheme = useColorScheme();
   const [variant, setVariant] = useState<Variant>(
     colorScheme === 'dark' ? 'dark' : 'default',
