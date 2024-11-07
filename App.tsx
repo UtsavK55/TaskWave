@@ -3,12 +3,11 @@ import {LinkingOptions, NavigationContainer} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
 import {UserLoginProvider} from '@contexts/Loginprovider';
-import ThemeProvider from '@contexts/ThemeProvider/ThemeProvider';
+import ThemeProvider from '@contexts/ThemeProvider';
 import Navigator from '@navigation/Navigator';
 import {ROUTES} from '@constants';
 
 function App(): React.JSX.Element {
-
   const linking: LinkingOptions<DrawerScreenParamList> = {
     prefixes: ['taskwave://', 'taskwave://boards'],
     config: {
