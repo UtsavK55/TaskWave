@@ -1,8 +1,8 @@
-import {useEffect, useState, useMemo, useCallback} from 'react';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   FlatList,
   ImageBackground,
-  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -10,13 +10,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 
 import BaseContainer from '@components/baseContainer';
 import Header from '@components/header';
 import HeaderIcon from '@components/headerIcon';
 import {ROUTES} from '@constants';
 import {useUserLoginContext} from '@contexts/Loginprovider';
+import {isAndroid} from '@helpers';
 import useTheme from '@hooks/useTheme';
 import {addData, fetchData} from '@network/apiMethods';
 import {listCardUrl, newCardUrl, newListUrl} from '@network/apiUrls';
@@ -151,25 +151,37 @@ const Lists = () => {
     </View>
   );
 
-  const renderHeaderLeftIcon = (isLeft: boolean) => {
-    const iconName =
-      isAddList || addingCardToListId
-        ? 'clear'
-        : Platform.OS === 'android'
-        ? 'arrow-back'
-        : 'arrow-back-ios-new';
+  const renderHeaderLeftIcon = () => {
+    let iconName: string;
+
+    if (isAddList || addingCardToListId) {
+      iconName = 'clear';
+    } else {
+      if (isAndroid()) {
+        iconName = 'arrow-back';
+      } else {
+        iconName = 'arrow-back-ios-new';
+      }
+    }
 
     return <HeaderIcon name={iconName} />;
   };
 
   const renderHeaderRightIcon = () => {
-    const iconName = isAddList || addingCardToListId ? 'check' : 'settings';
-    const color =
-      isAddList || addingCardToListId
-        ? newCard || newList
-          ? colors.white
-          : colors.gray200
-        : colors.white;
+    let iconName: string;
+    let color: string;
+
+    if (isAddList || addingCardToListId) {
+      iconName = 'check';
+      if (newCard || newList) {
+        color = colors.white;
+      } else {
+        color = colors.gray200;
+      }
+    } else {
+      iconName = 'settings';
+      color = colors.white;
+    }
 
     return <HeaderIcon name={iconName} color={color} />;
   };
@@ -180,7 +192,7 @@ const Lists = () => {
         headerText={
           isAddList ? 'Add list' : addingCardToListId ? 'Add Card' : boardName
         }
-        leftNode={renderHeaderLeftIcon(true)}
+        leftNode={renderHeaderLeftIcon()}
         rightNode={renderHeaderRightIcon()}
         handleOnPressLeftNode={
           isAddList || addingCardToListId ? onPressClear : onPressBack
