@@ -6,7 +6,7 @@ declare global {
     rightNode?: JSX.Element;
     headerText?: string;
     handleOnPressLeftNode?: (event: GestureResponderEvent) => void;
-    handleOnPressRightNode?: (event: GestureResponderEvent) => void;
+    handleOnPressRightNode?: (event?: GestureResponderEvent) => void;
     rightContainerStyle?: ViewProps['style'] | null;
     leftContainerStyle?: ViewProps['style'] | null;
   }
