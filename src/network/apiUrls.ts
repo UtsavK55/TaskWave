@@ -9,3 +9,11 @@ export const allBoardsUrl = (token: string) => {
 export const listCardUrl = (token: string, boardId: string, param: string) => {
   return `/1/boards/${boardId}/${param}?key=${API_KEY}&token=${token}`;
 };
+
+export const newListUrl = (token: string, newList: string, boardId: string) => {
+  return `/1/lists?name=${newList}&idBoard=${boardId}&key=${API_KEY}&token=${token}`;
+};
+
+export const newCardUrl = (token: string, newCard: string, listId: string) => {
+  return `/1/cards?name=${newCard}&idList=${listId}&key=${API_KEY}&token=${token}`;
+};
