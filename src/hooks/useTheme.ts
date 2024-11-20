@@ -1,5 +1,7 @@
-import {useContext} from 'react';
+import {useContext, useMemo} from 'react';
 import {ThemeContext} from '@contexts/ThemeProvider';
+import useScalingMetrics from './useScalingMetrics';
+import {Animated} from 'react-native';
 
 const useTheme = () => {
   const context = useContext(ThemeContext);
@@ -13,11 +15,25 @@ const useTheme = () => {
 
 export default useTheme;
 
-export const createThemedStyles = (
-  styleFunction: (theme: ThemeContext) => Record<string, any>,
+export const createThemedStyles = <T extends NamedStyles<T> | NamedStyles<any>>(
+  styleFunction: ThemedStyleFunction<T>,
 ) => {
-  return () => {
+  return (
+    scale?: Animated.Value,
+    value?: Animated.Value,
+    translateY?: Animated.Value,
+    fadeAnim?: Animated.Value,
+  ) => {
     const theme = useTheme();
-    return styleFunction(theme);
+    const scalingMetrics = useScalingMetrics();
+
+    return styleFunction(
+      theme,
+      scalingMetrics,
+      scale,
+      value,
+      translateY,
+      fadeAnim,
+    );
   };
 };
