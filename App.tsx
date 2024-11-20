@@ -1,44 +1,26 @@
-import React from 'react';
-import {LinkingOptions, NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
+import SplashScreen from '@components/splashScreen';
+import {linking, ROUTES} from '@constants';
 import {UserLoginProvider} from '@contexts/Loginprovider';
 import ThemeProvider from '@contexts/ThemeProvider';
 import Navigator from '@navigation/Navigator';
-import {ROUTES} from '@constants';
 
 function App(): React.JSX.Element {
-  const linking: LinkingOptions<DrawerScreenParamList> = {
-    prefixes: ['taskwave://', 'taskwave://boards'],
-    config: {
-      screens: {
-        [ROUTES.DRAWER.BOARDS]: {
-          screens: {
-            [ROUTES.BOARDS_STACK_SCREEN.BOARDS_SCREEN]: 'boards',
-            [ROUTES.BOARDS_STACK_SCREEN.ADD_BOARD_SCREEN]: 'add-board',
-            [ROUTES.BOARDS_STACK_SCREEN.LISTS_SCREEN]: 'lists',
-            [ROUTES.BOARDS_STACK_SCREEN.NOTIFICATION_SCREEN]: 'notification',
-            [ROUTES.BOARDS_STACK_SCREEN.SETTINGS_SCREEN]: 'board-settings',
-            [ROUTES.BOARDS_STACK_SCREEN.SEARCH_SCREEN]: 'search',
-            [ROUTES.BOARDS_STACK_SCREEN.CARD_DETAILS_SCREEN]: {
-              path: 'card/:cardId',
-              parse: {
-                cardId: (cardId: string) => parseInt(cardId, 10),
-              },
-            },
-          },
-        },
-        [ROUTES.DRAWER.CARDS]: 'cards',
-        [ROUTES.DRAWER.SETTINGS]: 'settings',
-      },
-    },
-  };
+  const [isSplashScreen, setIsSplahScreen] = useState(true);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSplahScreen(false);
+    }, 3100);
+  }, []);
   return (
     <UserLoginProvider>
       <ThemeProvider>
         <NavigationContainer linking={linking}>
-          <Navigator />
+          {isSplashScreen ? <SplashScreen /> : <Navigator />}
           <Toast />
         </NavigationContainer>
       </ThemeProvider>

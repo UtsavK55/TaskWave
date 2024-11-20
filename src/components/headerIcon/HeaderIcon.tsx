@@ -1,5 +1,7 @@
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import useTheme from '@hooks/useTheme';
+import useScalingMetrics from '@hooks/useScalingMetrics';
 
 const HeaderIcon = ({
   name,
@@ -11,7 +13,14 @@ const HeaderIcon = ({
   color?: string;
 }) => {
   const {colors} = useTheme();
-  return <Icon name={name} size={size || 24} color={color || colors.white} />;
+  const {scaleSize} = useScalingMetrics();
+  return (
+    <Icon
+      name={name}
+      size={scaleSize(size || 24)}
+      color={color || colors.fixedWhite}
+    />
+  );
 };
 
 export default HeaderIcon;
