@@ -137,11 +137,7 @@ const Boards = () => {
 
   const onPressStory = () => {
     setIsStoryVisible(true);
-    Animated.timing(storyTime, {
-      toValue: 0,
-      duration: 15000,
-      useNativeDriver: true,
-    }).start(() => {
+    startAnimation(storyTime, 0, 5000, () => {
       setIsStoryVisible(false);
       storyTime.setValue(-wp(100));
     });
