@@ -1,4 +1,4 @@
-import {config} from '@src/theme/themeConfig';
+import {config} from '@theme/themeConfig';
 import {TextStyle, ViewStyle} from 'react-native';
 
 function hasProperty<Config, KeyPath extends string>(
