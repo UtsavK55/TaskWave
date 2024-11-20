@@ -65,7 +65,6 @@ const Boards = () => {
     setIsLoading(true);
 
     const allBoardsInfo = await fetchData(allBoardsUrl(token));
-    console.log(allBoardsInfo);
     const allBoards: AllBoards = allBoardsInfo.map(
       ({id, name, prefs}: BoardInfo) => ({
         id,
@@ -92,7 +91,6 @@ const Boards = () => {
     setBoards(boardsWithCardCount);
 
     const allCardsInfo = await fetchData(getMyCardsUrl(token));
-    console.log(allCardsInfo);
     const allCards: AllCards = allCardsInfo.map(
       ({id, idBoard, name, dateLastActivity}: CardInfo) => ({
         id,
