@@ -1,64 +1,92 @@
 import {StyleSheet} from 'react-native';
-import {windowHeight, windowWidth} from '@constants';
+
 import {createThemedStyles} from '@hooks/useTheme';
 
-export const loginStyles = createThemedStyles((theme: ThemeContext) => {
-  const {backgrounds, layout, fonts, gutters, borders} = theme;
-  const styles = StyleSheet.create({
-    image: {
-      width: windowWidth * 0.33,
-      height: windowHeight * 0.15,
-    },
-  });
-
-  return {
-    container: [layout.flex_1, backgrounds.blue700],
-    welcomeTitle: [
-      fonts.alignCenter,
-      gutters.marginTop_80,
-      fonts.white,
-      fonts.bold,
-      fonts.size_40,
-    ],
-    imageContainer: [layout.row, layout.justifyCenter, gutters.marginTop_40],
-    image: [
-      styles.image,
-      borders.rounded_70,
-      backgrounds.white,
-      gutters.paddingVertical_12,
-    ],
-    appTitle: [
-      fonts.alignCenter,
-      fonts.white,
-      fonts.size_24,
-      fonts.semibold,
-      gutters.marginVertical_12,
-    ],
-    infoContainer: [backgrounds.white, layout.fullHeight, gutters.marginTop_80],
-    info: [
-      fonts.alignCenter,
-      fonts.black,
-      fonts.size_24,
-      fonts.bold,
-      gutters.marginTop_32,
-      gutters.paddingHorizontal_32,
-    ],
-    buttonText: [
-      borders.w_1,
-      borders.blue700,
-      fonts.alignCenter,
-      gutters.marginHorizontal_40,
-      gutters.marginTop_80,
-      gutters.paddingVertical_12,
-      fonts.blue700,
-      borders.rounded_4,
-      fonts.bold,
-    ],
-    termText: [
-      fonts.alignCenter,
-      fonts.gray800,
-      gutters.marginTop_24,
-      gutters.paddingHorizontal_40,
-    ],
-  };
-});
+export const loginStyles = createThemedStyles(
+  (theme, scalingMetrics, scale, value, translateY, fadeAnim) => {
+    const {hp, wp, scaleSize, moderateScale, isLandscape} = scalingMetrics;
+    const {layout, colors} = theme;
+    return StyleSheet.create({
+      image: {
+        width: wp(33),
+        height: wp(33),
+        borderRadius: scaleSize(70),
+        backgroundColor: colors.white,
+        paddingVertical: scaleSize(12),
+      },
+      container: {...layout.flex_1, ...layout.col},
+      topContainer: {
+        flex: 6,
+        backgroundColor: colors.blue700,
+        ...layout.itemsCenter,
+        ...layout.justifyCenter,
+      },
+      imageContainer: {
+        ...layout.row,
+        ...layout.justifyCenter,
+      },
+      childContainer: {
+        ...layout.itemsCenter,
+        ...layout.justifyCenter,
+        position: 'absolute',
+        top: isLandscape() ? wp(25) : wp(50),
+      },
+      appTitle: {
+        textAlign: 'center',
+        fontSize: moderateScale(24),
+        fontWeight: 'semibold',
+        marginVertical: scaleSize(24),
+      },
+      infoContainer: {
+        backgroundColor: colors.white,
+        flex: 1,
+      },
+      info: {
+        textAlign: 'center',
+        color: colors.fixedWhite,
+        fontSize: moderateScale(28),
+        fontWeight: 'bold',
+        position: 'absolute',
+        bottom: wp(15),
+        marginHorizontal: scaleSize(24),
+      },
+      buttonText: {
+        borderWidth: 1,
+        borderColor: colors.fixedblue700,
+        textAlign: 'center',
+        marginHorizontal: scaleSize(40),
+        marginTop: isLandscape() ? scaleSize(10) : scaleSize(20),
+        paddingVertical: scaleSize(12),
+        color: colors.fixedblue700,
+        borderRadius: scaleSize(4),
+        fontWeight: 'bold',
+        fontSize: moderateScale(14),
+      },
+      termText: {
+        textAlign: 'center',
+        color: colors.fixedWhite,
+        position: 'absolute',
+        bottom: wp(8),
+        fontSize: moderateScale(14),
+      },
+      formContainer: {
+        height: hp(40),
+        ...layout.fullWidth,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'white',
+        borderTopLeftRadius: scaleSize(20),
+        borderTopRightRadius: scaleSize(20),
+        zIndex: 10000,
+        paddingHorizontal: scaleSize(24),
+      },
+      input: {
+        backgroundColor: colors.white,
+        marginTop: scaleSize(24),
+      },
+      submit: {marginTop: scaleSize(24)},
+    });
+  },
+);
