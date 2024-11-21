@@ -10,6 +10,38 @@ declare global {
   type DrawerNavigationType = NavigationProp<DrawerScreenParamList>;
 
   type BoardsScreenNames = keyof typeof ROUTES.BOARDS_STACK_SCREEN;
-  type BoardsScreenParamList = Record<BoardsScreenNames, undefined>;
-  type BoardsNavigationType = NavigationProp<BoardScreenParamList>;
+  type BoardsScreenParamList = {
+    BOARDS_SCREEN: undefined;
+    LISTS_SCREEN: {
+      boardId: string;
+      boardName: string;
+      backgroundImageUrl: string;
+      fromScreen: string;
+    };
+    CARD_DETAILS_SCREEN: {fromScreen: string; cardId: string};
+    ADD_BOARD_SCREEN: undefined;
+    SEARCH_SCREEN: undefined;
+    NOTIFICATION_SCREEN: undefined;
+    SETTINGS_SCREEN: {boardId: string};
+    INVITE_MEMBER_SCREEN: undefined;
+  };
+  type BoardsNavigationType = NavigationProp<BoardsScreenParamList>;
+
+  type MyCardsScreenNames = keyof typeof ROUTES.BOARDS_STACK_SCREEN;
+  type MyCardsScreenParamList = {
+    MY_CARDS: undefined;
+    CARD_DETAILS_SCREEN: {fromScreen: string; cardId: string};
+  };
+  type MyCardsNavigationType = NavigationPropMyCards<ScreenParamList>;
+
+  interface DrawerItemProps {
+    routeName: string;
+    iconName: string;
+    label: string;
+    isActive: boolean;
+    onPress: () => void;
+    colors: Colors;
+    styles: Record<string, any>;
+    scaleSize: (size: number, factor?: number | undefined) => number;
+  }
 }
