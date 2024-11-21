@@ -1,11 +1,12 @@
-import {Text, View} from 'react-native';
-import useTheme from '@src/hooks/useTheme';
+import {Text, TextStyle, View} from 'react-native';
 
-const NoDataFound = ({item}: {item?: string}) => {
+import useTheme from '@hooks/useTheme';
+
+const NoDataFound = ({item, style}: {item?: string; style?: TextStyle}) => {
   const {layout, gutters, fonts} = useTheme();
   return (
-    <View style={[layout.flex_1, gutters.margin_10]}>
-      <Text style={[fonts.black]}>No {item || 'data'} found</Text>
+    <View style={[layout.flex_1, gutters.margin_10,]}>
+      <Text style={[fonts.black, style]}>No {item || 'data'} found</Text>
     </View>
   );
 };
