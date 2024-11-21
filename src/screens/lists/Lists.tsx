@@ -16,6 +16,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 import BaseContainer from '@components/baseContainer';
 import Header from '@components/header';
@@ -43,13 +44,11 @@ import {
   updateCardList,
 } from '@network/apiUrls';
 
-import FastImage from 'react-native-fast-image';
-
 import {listStyles} from './styles';
 
 const Lists = () => {
   const styles = listStyles();
-  const {colors, backgrounds, fonts, layout, gutters, borders} = useTheme();
+  const {colors, fonts, gutters} = useTheme();
   const isFocused = useIsFocused();
   const {token} = useUserLoginContext();
   const boardNavigation = useNavigation<BoardsNavigationType>();
@@ -108,10 +107,20 @@ const Lists = () => {
     return (listId: string) => cards.filter(({idList}) => idList === listId);
   }, [cards]);
 
-  const onPressBack = () => {
+  const inputConditions = useMemo(() => {
+    return addingCardToListId || editListbyId || isAddList;
+  }, [addingCardToListId, editListbyId, isAddList]);
+
+  // Actions, Navigation handlers and Event handlers
+
+  const onScreenChange = () => {
     setIsAddList(false);
     setAddingCardToListId('');
     setEditListById('');
+  };
+
+  const onPressBack = () => {
+    onScreenChange();
     if (fromScreen === ROUTES.BOARDS_STACK_SCREEN.BOARDS_SCREEN) {
       boardNavigation.goBack();
     } else {
@@ -127,9 +136,7 @@ const Lists = () => {
     boardNavigation.navigate(ROUTES.BOARDS_STACK_SCREEN.SETTINGS_SCREEN, {
       boardId: boardId,
     });
-    setIsAddList(false);
-    setAddingCardToListId('');
-    setEditListById('');
+    onScreenChange();
   };
 
   const onPressClear = () => {
@@ -257,6 +264,39 @@ const Lists = () => {
     }
   };
 
+  const onPressDelete = async () => {
+    Alert.alert('Delete Board', 'Are you sure you want to delete this board', [
+      {text: 'Cancel', style: 'cancel'},
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          await deleteData(deletBoardUrl(token, boardId));
+          boardNavigation.popToTop();
+          ShowToast('success', 'Board deleted successfully');
+        },
+      },
+    ]);
+  };
+
+  // Following UI components are used only in this screen
+
+  const textInputField = (
+    placeholder: string,
+    value: string,
+    inputCondition: 'newList' | 'editList' | 'card',
+    style: Record<string, any>,
+  ) => (
+    <TextInput
+      placeholder={placeholder}
+      placeholderTextColor={colors.gray400}
+      autoFocus
+      style={style}
+      value={value}
+      onChangeText={value => onInputChange(value, inputCondition)}
+    />
+  );
+
   const renderCard = ({item}: {item: CardInfo}) => (
     <TouchableOpacity onPress={() => onPressCard(item.id)}>
       <View style={styles.cardContainer}>
@@ -266,22 +306,14 @@ const Lists = () => {
             onPress={() => onPressMove(item?.id, item?.idList as string)}>
             <HeaderIcon
               name={'move-up'}
-              color={
-                addingCardToListId || editListbyId || isAddList
-                  ? colors.gray200
-                  : colors.blue700
-              }
+              color={inputConditions ? colors.gray200 : colors.blue700}
               size={20}
             />
           </Pressable>
           <Pressable onPress={() => onPressCardDelete(item?.id)}>
             <HeaderIcon
               name={'delete'}
-              color={
-                addingCardToListId || editListbyId || isAddList
-                  ? colors.gray200
-                  : colors.red500
-              }
+              color={inputConditions ? colors.gray200 : colors.red500}
               size={20}
             />
           </Pressable>
@@ -290,84 +322,78 @@ const Lists = () => {
     </TouchableOpacity>
   );
 
+  const editListTitle = () => (
+    <View style={styles.titleContainer}>
+      {textInputField('List name', listTitle, 'editList', styles.input)}
+      <View style={styles.cardActions}>
+        <Pressable onPress={onPressClear}>
+          <HeaderIcon name={'clear'} color={colors.red500} size={20} />
+        </Pressable>
+        <Pressable onPress={onPressCheck}>
+          <HeaderIcon
+            name={'check'}
+            color={listTitle ? 'green' : colors.gray200}
+            size={20}
+          />
+        </Pressable>
+      </View>
+    </View>
+  );
+
+  const showListTitle = (list: ListInfo) => (
+    <View style={styles.titleContainer}>
+      <View style={styles.listAction}>
+        <Text style={styles.listTitle}>{list?.name}</Text>
+        <Pressable
+          onPress={() => onPressListTitle(list)}
+          style={styles.editAction}>
+          <HeaderIcon
+            name={'edit'}
+            color={addingCardToListId ? colors.gray200 : colors.gray400}
+            size={16}
+          />
+        </Pressable>
+      </View>
+      <TouchableOpacity
+        onPress={() => onPressListArchive(list?.id)}
+        style={styles.archiveAction}>
+        <HeaderIcon
+          name="archive"
+          color={addingCardToListId ? colors.gray200 : colors.blue700}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
+  const addCardtoListInput = () => (
+    <View style={[styles.cardContainer, styles.titleContainer]}>
+      {textInputField('Card name', newCard, 'card', styles.cardTitle)}
+      <View style={styles.cardActions}>
+        <Pressable onPress={onPressClear}>
+          <HeaderIcon name={'clear'} color={colors.red500} size={20} />
+        </Pressable>
+        <Pressable onPress={onPressCheck}>
+          <HeaderIcon
+            name={'check'}
+            color={newCard ? 'green' : colors.gray200}
+            size={20}
+          />
+        </Pressable>
+      </View>
+    </View>
+  );
+
   const renderList = (list: ListInfo) => (
     <View key={list.id} style={styles.listContainer}>
       <View style={styles.listChildContainer}>
-        {editListbyId === list?.id ? (
-          <View style={styles.titleContainer}>
-            <TextInput
-              editable
-              placeholder="List name"
-              placeholderTextColor={colors.gray400}
-              autoFocus
-              style={styles.input}
-              value={listTitle}
-              onChangeText={value => onInputChange(value, 'editList')}
-            />
-            <View style={styles.cardActions}>
-              <Pressable onPress={onPressClear}>
-                <HeaderIcon name={'clear'} color={colors.red500} size={20} />
-              </Pressable>
-              <Pressable onPress={onPressCheck}>
-                <HeaderIcon
-                  name={'check'}
-                  color={listTitle ? 'green' : colors.gray200}
-                  size={20}
-                />
-              </Pressable>
-            </View>
-          </View>
-        ) : (
-          <View style={styles.titleContainer}>
-            <View style={styles.listAction}>
-              <Text style={styles.listTitle}>{list?.name}</Text>
-              <Pressable
-                onPress={() => onPressListTitle(list)}
-                style={styles.editAction}>
-                <HeaderIcon
-                  name={'edit'}
-                  color={addingCardToListId ? colors.gray200 : colors.gray400}
-                  size={16}
-                />
-              </Pressable>
-            </View>
-            <TouchableOpacity
-              onPress={() => onPressListArchive(list?.id)}
-              style={styles.archiveAction}>
-              <HeaderIcon
-                name="archive"
-                color={addingCardToListId ? colors.gray200 : colors.blue700}
-              />
-            </TouchableOpacity>
-          </View>
-        )}
+        {editListbyId === list?.id ? editListTitle() : showListTitle(list)}
         {isCardLoading ? (
-          <Loader size={'small'} bgColor="rgba(0, 0, 0, 0.5)" />
+          <Loader size={'small'} bgColor={colors.transparent} />
         ) : (
           <FlatList data={cardsArr(list.id)} renderItem={renderCard} />
         )}
         {addingCardToListId === list.id ? (
-          <View style={[styles.cardContainer, styles.titleContainer]}>
-            <TextInput
-              placeholder="Card name"
-              placeholderTextColor={colors.gray400}
-              autoFocus
-              style={styles.cardTitle}
-              onChangeText={value => onInputChange(value, 'card')}
-            />
-            <View style={styles.cardActions}>
-              <Pressable onPress={onPressClear}>
-                <HeaderIcon name={'clear'} color={colors.red500} size={20} />
-              </Pressable>
-              <Pressable onPress={onPressCheck}>
-                <HeaderIcon
-                  name={'check'}
-                  color={newCard ? 'green' : colors.gray200}
-                  size={20}
-                />
-              </Pressable>
-            </View>
-          </View>
+          addCardtoListInput()
         ) : (
           <Pressable onPress={() => onPressAddCard(list?.id)}>
             <Text
@@ -383,33 +409,29 @@ const Lists = () => {
     </View>
   );
 
+  const addListInput = () => (
+    <View style={styles.addListContainer}>
+      {textInputField('List name', newList, 'newList', [fonts.black])}
+      <View style={styles.cardActions}>
+        <Pressable onPress={onPressClear}>
+          <HeaderIcon name={'clear'} color={colors.red500} size={20} />
+        </Pressable>
+        <Pressable onPress={onPressCheck}>
+          <HeaderIcon
+            name={'check'}
+            color={newList ? 'green' : colors.gray200}
+            size={20}
+          />
+        </Pressable>
+      </View>
+    </View>
+  );
+
   const renderAddList = () => (
     <View style={styles.listContainer}>
-      <View
-        style={styles.listChildContainer}>
+      <View style={styles.listChildContainer}>
         {isAddList ? (
-          <View
-            style={styles.addListContainer}>
-            <TextInput
-              placeholder="List name"
-              placeholderTextColor={colors.gray400}
-              autoFocus
-              style={[fonts.black]}
-              onChangeText={value => onInputChange(value, 'newList')}
-            />
-            <View style={styles.cardActions}>
-              <Pressable onPress={onPressClear}>
-                <HeaderIcon name={'clear'} color={colors.red500} size={20} />
-              </Pressable>
-              <Pressable onPress={onPressCheck}>
-                <HeaderIcon
-                  name={'check'}
-                  color={newList ? 'green' : colors.gray200}
-                  size={20}
-                />
-              </Pressable>
-            </View>
-          </View>
+          addListInput()
         ) : (
           <Pressable onPress={() => setIsAddList(true)}>
             <Text style={styles.addList}>Add List</Text>
@@ -429,21 +451,6 @@ const Lists = () => {
     }
 
     return <HeaderIcon name={iconName} />;
-  };
-
-  const onPressDelete = async () => {
-    Alert.alert('Delete Board', 'Are you sure you want to delete this board', [
-      {text: 'Cancel', style: 'cancel'},
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          await deleteData(deletBoardUrl(token, boardId));
-          boardNavigation.popToTop();
-          ShowToast('success', 'Board deleted successfully');
-        },
-      },
-    ]);
   };
 
   const renderHeaderRightIcon = () => {
@@ -473,7 +480,7 @@ const Lists = () => {
         defaultSource={IMAGES.titleImg}
         style={styles.imageBg}>
         {isLoading ? (
-          <Loader size={'large'} bgColor="rgba(0, 0, 0, 0.5)" />
+          <Loader size={'large'} bgColor={colors.transparent} />
         ) : (
           <ScrollView
             horizontal
@@ -485,6 +492,7 @@ const Lists = () => {
       </FastImage>
       <CustomModal
         visible={isVisible}
+        title="Move card"
         onPressClear={onPressModalClear}
         onPressCheck={onPressModalCheck}>
         <View style={[gutters.padding_12]}>

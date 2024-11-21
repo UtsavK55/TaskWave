@@ -1,6 +1,7 @@
 interface CustomModalProps {
   children: React.ReactNode;
   visible: boolean;
+  title: string;
   onPressClear: () => void;
   onPressCheck: () => void;
 }

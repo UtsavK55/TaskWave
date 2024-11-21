@@ -2,7 +2,7 @@ import {Text, TextStyle, View} from 'react-native';
 
 import useTheme from '@hooks/useTheme';
 
-const NoDataFound = ({item, style}: {item?: string; style?: TextStyle}) => {
+const NoDataFound = ({item, style}: NoDataFoundProps) => {
   const {layout, gutters, fonts} = useTheme();
   return (
     <View style={[layout.flex_1, gutters.margin_10,]}>

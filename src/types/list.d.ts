@@ -14,3 +14,8 @@ interface CardInfo {
 }
 
 type AllCards = CardInfo[];
+
+interface NoDataFoundProps {
+  item?: string;
+  style?: TextStyle;
+}

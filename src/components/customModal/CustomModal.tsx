@@ -9,6 +9,7 @@ import {customModalStyles} from './styles';
 const CustomModal: React.FC<CustomModalProps> = ({
   children,
   visible,
+  title,
   onPressClear,
   onPressCheck,
 }) => {
@@ -20,7 +21,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Header
-                headerText="Move card"
+                headerText={title}
                 leftNode={<HeaderIcon name="clear" />}
                 rightNode={<HeaderIcon name="check" />}
                 handleOnPressLeftNode={onPressClear}
