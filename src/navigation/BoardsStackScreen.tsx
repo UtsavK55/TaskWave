@@ -1,13 +1,13 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+import {ROUTES} from '@constants';
 import AddBoard from '@screens/addBoard/AddBoard';
 import Boards from '@screens/boards/Boards';
 import BoardSettings from '@screens/boardSettings/BoardSettings';
 import CardDetails from '@screens/cardDetails/CardDetails';
 import Lists from '@screens/lists/Lists';
-import Notification from '@screens/notification/Notification';
 import Search from '@screens/search/Search';
-import {ROUTES} from '@constants';
+import InviteMember from '@screens/inviteMember/InviteMember';
 
 const BoardsStackScreen = () => {
   const BoardsStack = createNativeStackNavigator<BoardsScreenParamList>();
@@ -30,10 +30,6 @@ const BoardsStackScreen = () => {
         component={Lists}
       />
       <BoardsStack.Screen
-        name={ROUTES.BOARDS_STACK_SCREEN.NOTIFICATION_SCREEN}
-        component={Notification}
-      />
-      <BoardsStack.Screen
         name={ROUTES.BOARDS_STACK_SCREEN.SETTINGS_SCREEN}
         component={BoardSettings}
       />
@@ -44,6 +40,10 @@ const BoardsStackScreen = () => {
       <BoardsStack.Screen
         name={ROUTES.BOARDS_STACK_SCREEN.CARD_DETAILS_SCREEN}
         component={CardDetails}
+      />
+      <BoardsStack.Screen
+        name={ROUTES.BOARDS_STACK_SCREEN.INVITE_MEMBER_SCREEN}
+        component={InviteMember}
       />
     </BoardsStack.Navigator>
   );

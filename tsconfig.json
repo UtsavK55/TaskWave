@@ -3,13 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@constants": ["src/constants"],
       "@constants/*": ["src/constants/*"],
       "@contexts/*": ["src/contexts/*"],
-      "@config/*": ["src/config/*"],
       "@helpers": ["src/helpers"],
       "@helpers/*": ["src/helpers/*"],
       "@hooks/*": ["src/hooks/*"],
@@ -19,7 +17,8 @@
       "@storage": ["src/storage"],
       "@storage/*": ["src/storage/*"],
       "@theme/*": ["src/theme/*"],
-      "@types": ["src/types/*"]
+      "@types": ["src/types"],
+      "@types/*": ["src/types/*"]
     },
     "types": [],
     "strict": true,

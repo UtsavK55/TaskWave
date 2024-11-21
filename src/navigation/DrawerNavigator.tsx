@@ -1,15 +1,17 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import {ROUTES} from '@constants';
-import BoardsStackScreen from '@navigation/BoardsStackScreen';
-import MyCards from '@screens/myCards/MyCards';
-import Settings from '@screens/settings/Settings';
+import CustomDrawerContent from '@components/customDrawerContent';
+
+import BoardsStackScreen from './BoardsStackScreen';
+import MyCardsStackScreen from './MyCardsStackScreen';
 
 const Drawer = createDrawerNavigator<DrawerScreenParamList>();
 
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
+      drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
       }}>
@@ -17,8 +19,10 @@ const DrawerNavigator = () => {
         name={ROUTES.DRAWER.BOARDS}
         component={BoardsStackScreen}
       />
-      <Drawer.Screen name={ROUTES.DRAWER.CARDS} component={MyCards} />
-      <Drawer.Screen name={ROUTES.DRAWER.SETTINGS} component={Settings} />
+      <Drawer.Screen
+        name={ROUTES.DRAWER.CARDS}
+        component={MyCardsStackScreen}
+      />
     </Drawer.Navigator>
   );
 };
