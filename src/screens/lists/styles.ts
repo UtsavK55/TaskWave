@@ -1,18 +1,22 @@
 import {StyleSheet} from 'react-native';
-import {windowHeight, windowWidth} from '@constants';
+
 import {createThemedStyles} from '@hooks/useTheme';
 
-export const listStyles = createThemedStyles((theme: ThemeContext) => {
-  const {backgrounds, layout, fonts, gutters, borders} = theme;
+export const listStyles = createThemedStyles((theme, scalingMetrics) => {
+  const {backgrounds, layout, fonts, borders} = theme;
+  const {wp, scaleSize, moderateScale} = scalingMetrics;
+
   const styles = StyleSheet.create({
     cardContainer: {
       shadowOffset: {width: 0, height: 1},
       shadowOpacity: 0.1,
       shadowRadius: 1,
       elevation: 5,
+      marginVertical: scaleSize(8),
+      borderRadius: scaleSize(8),
     },
     listContainer: {
-      width: windowWidth * 0.8,
+      width: wp(80),
     },
   });
 
@@ -20,34 +24,53 @@ export const listStyles = createThemedStyles((theme: ThemeContext) => {
     cardContainer: [
       styles.cardContainer,
       backgrounds.white,
-      gutters.marginVertical_8,
-      borders.rounded_8,
       borders.w_1,
       borders.gray100,
+      layout.row,
+      layout.justifyBetween,
+      layout.itemsCenter,
     ],
-    cardTitle: [fonts.black, gutters.padding_12],
+    cardTitle: [fonts.black, {padding: scaleSize(12)}],
     imageBg: [layout.flex_1, layout.justifyCenter],
-    listContainer: [gutters.margin_12, styles.listContainer],
+    listContainer: [{margin: scaleSize(12)}, styles.listContainer],
     listChildContainer: [
       backgrounds.gray50,
-      gutters.paddingVertical_8,
-      gutters.paddingHorizontal_12,
-      borders.rounded_8,
+      {
+        paddingVertical: scaleSize(8),
+        paddingHorizontal: scaleSize(12),
+        borderRadius: scaleSize(8),
+      },
     ],
     listTitle: [
       fonts.black,
-      fonts.size_16,
-      gutters.paddingTop_4,
-      gutters.paddingBottom_12,
+      {
+        fontSize: moderateScale(16),
+        paddingTop: scaleSize(4),
+        paddingBottom: scaleSize(12),
+      },
       fonts.semiBold,
     ],
-    addList: [fonts.alignCenter, fonts.blue700, fonts.bold, gutters.paddingVertical_8],
-    input: [
-      borders.wBottom_1,
-      borders.blue700,
-      fonts.size_16,
-      gutters.paddingVertical_4,
+    addList: [
+      fonts.alignCenter,
+      fonts.fixedblue700,
+      fonts.bold,
+      {paddingVertical: scaleSize(8)},
     ],
-    addCard: [fonts.blue700, gutters.marginTop_8],
+    listAction: [layout.row, layout.itemsCenter, {gap: scaleSize(2)}],
+    input: [
+      {fontSize: moderateScale(16), paddingVertical: scaleSize(4)},
+      fonts.black,
+    ],
+    addCard: [fonts.fixedblue700, {marginTop: scaleSize(8)}],
+    titleContainer: [layout.row, layout.justifyBetween],
+    cardActions: [layout.row, {gap: scaleSize(4), marginRight: scaleSize(4)}],
+    editAction: [{paddingTop: scaleSize(4), paddingBottom: scaleSize(12)}],
+    archiveAction: [{paddingTop: scaleSize(4), paddingBottom: scaleSize(12)}],
+    addListContainer: [
+      layout.row,
+      layout.justifyBetween,
+      layout.itemsCenter,
+      {paddingHorizontal: scaleSize(8), paddingVertical: scaleSize(4)},
+    ],
   };
 });

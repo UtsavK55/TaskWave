@@ -23,6 +23,7 @@ const colorsLight = {
   blue200: '#b1dfff',
   blue100: '#d4eeff',
   orange: '#f04006',
+  transparent: 'rgba(0, 0, 0, 0.5)',
 } as const;
 
 const colorsDark = {
@@ -46,6 +47,7 @@ const colorsDark = {
   blue200: '#75B3FF',
   blue100: '#A2C8FF',
   orange: '#f04006',
+  transparent: 'rgba(0, 0, 0, 0.5)',
 } as const;
 
 const sizes = [1, 2, 4, 8, 12, 16, 20, 24, 32, 40, 60, 80] as const;

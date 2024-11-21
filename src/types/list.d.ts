@@ -7,8 +7,15 @@ type AllLists = ListInfo[];
 
 interface CardInfo {
   id: string;
-  idList: string;
+  idList?: string;
+  idBoard?: string;
   name: string;
+  dateLastActivity: string;
 }
 
 type AllCards = CardInfo[];
+
+interface NoDataFoundProps {
+  item?: string;
+  style?: TextStyle;
+}
