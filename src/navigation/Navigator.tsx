@@ -1,12 +1,14 @@
 import {useEffect} from 'react';
 import {Linking, SafeAreaView} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-import DrawerNavigator from '@navigation/DrawerNavigator';
-import AuthNavigator from '@navigation/AuthNavigator';
 import ShowToast from '@components/showToast';
-import {useUserLoginContext} from '@contexts/Loginprovider';
+import CustomStatusBar from '@components/customStatusBar';
 import {STORAGE_KEYS, tokenRegex} from '@constants';
+import {useUserLoginContext} from '@contexts/Loginprovider';
 import useTheme from '@hooks/useTheme';
+import DrawerNavigator from '@navigation/DrawerNavigator';
+import Login from '@screens/login/Login';
 import {storeData} from '@storage';
 
 const Navigator = () => {
@@ -27,9 +29,12 @@ const Navigator = () => {
   }, []);
 
   return (
-    <SafeAreaView style={layout.flex_1}>
-      {token ? <DrawerNavigator /> : <AuthNavigator />}
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <CustomStatusBar />
+      <SafeAreaView style={layout.flex_1}>
+        {token ? <DrawerNavigator /> : <Login />}
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

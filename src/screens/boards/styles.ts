@@ -19,7 +19,7 @@ export const boardStyles = createThemedStyles((theme, scalingMetrics) => {
       color: colors.fixedWhite,
     },
     bottomContainer: {
-      height: hp(47),
+      height: hp(45),
       ...layout.fullWidth,
       position: 'absolute',
       bottom: 0,
@@ -30,7 +30,7 @@ export const boardStyles = createThemedStyles((theme, scalingMetrics) => {
       borderTopRightRadius: scaleSize(16),
     },
     sectionTitle: {
-      marginTop: scaleSize(20),
+      marginTop: scaleSize(10),
       fontSize: moderateScale(24),
       fontWeight: 'bold',
       marginHorizontal: scaleSize(20),

@@ -3,29 +3,21 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import useTheme from '@hooks/useTheme';
 
-const CustomStatusBar = ({
-  showStatusBar = false,
-}: {
-  showStatusBar?: boolean;
-}) => {
+const CustomStatusBar = () => {
   const {colors} = useTheme();
   const insets = useSafeAreaInsets();
 
   const styles = StyleSheet.create({
     statusBar: {
-      height: showStatusBar ? insets.top : 0,
+      height: insets.top,
       width: '100%',
-      backgroundColor: showStatusBar ? colors.blue700 : 'transparent',
+      backgroundColor: colors.blue700,
     },
   });
 
   return (
     <View style={styles.statusBar}>
-      <StatusBar
-        animated
-        backgroundColor={styles.statusBar.backgroundColor}
-        translucent={!showStatusBar}
-      />
+      <StatusBar animated backgroundColor={styles.statusBar.backgroundColor} />
     </View>
   );
 };

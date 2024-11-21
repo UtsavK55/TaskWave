@@ -9,8 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import LinearGradient from 'react-native-linear-gradient';
 
 import BaseContainer from '@components/baseContainer';
 import Header from '@components/header';
@@ -18,14 +16,19 @@ import HeaderIcon from '@components/headerIcon';
 import Loader from '@components/loader';
 import NoDataFound from '@components/noDataFound';
 import Carousel from '@components/carousel';
+
 import {colorArray, ROUTES} from '@constants';
 import {imageArray} from '@constants/imageConstants';
+
 import {useUserLoginContext} from '@contexts/Loginprovider';
 import {startAnimation, truncateText} from '@helpers';
 import useTheme from '@hooks/useTheme';
 import useScalingMetrics from '@hooks/useScalingMetrics';
 import {fetchData} from '@network/apiMethods';
 import {allBoardsUrl, getMyCardsUrl, listCardUrl} from '@network/apiUrls';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {boardStyles} from './styles';
 
@@ -41,6 +44,92 @@ const animate = (
   setTimeout(() => {
     startAnimation(translateX, 10, 1000);
   }, 600);
+};
+
+const renderTaskItem = ({
+  item,
+  boards,
+  translateX,
+  styles,
+  colors,
+}: {
+  item: CardInfo;
+  boards: AllBoards;
+  translateX: Animated.Value;
+  styles: Record<string, any>;
+  colors: Colors;
+}) => {
+  const board = boards.find(({id}) => id === item?.idBoard);
+  return (
+    <Animated.View
+      style={[
+        styles.taskItemContainer,
+        {
+          transform: [{translateX: translateX}],
+        },
+      ]}>
+      <LinearGradient
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={[colors.blue700, colors.blue300]}
+        style={styles.taskItemBoardContainer}>
+        <Text style={styles.taskItemBoardName}>
+          {truncateText(board?.name as string, 20)}
+        </Text>
+      </LinearGradient>
+      <View style={styles.taskItemTitleContainer}>
+        <Text style={styles.taskItemtitle}>
+          {truncateText(item?.name as string, 20)}
+        </Text>
+      </View>
+    </Animated.View>
+  );
+};
+const renderStoryItem = ({
+  item,
+  onPressStory,
+  translateCircularX,
+  styles,
+}: {
+  item: MappedBoard;
+  onPressStory: () => void;
+  translateCircularX: Animated.Value;
+  styles: Record<string, any>;
+}) => {
+  const randomImage = imageArray[Math.floor(Math.random() * imageArray.length)];
+  const bgColor = colorArray[Math.floor(Math.random() * colorArray.length)];
+  return (
+    <TouchableOpacity onPress={onPressStory}>
+      <Animated.View
+        style={[
+          styles.storyItemContainer,
+          {
+            transform: [{translateX: translateCircularX}],
+          },
+        ]}>
+        <View
+          style={[
+            styles.storyItemImageContainer,
+            {
+              backgroundColor: bgColor,
+            },
+          ]}>
+          <Image source={randomImage} style={styles.storyItemImage} />
+        </View>
+        <View
+          style={[
+            styles.storyItemBorder,
+            {
+              borderColor: bgColor,
+            },
+          ]}
+        />
+        <Text style={styles.storyItemTitle}>
+          {truncateText(item?.name as string, 10)}
+        </Text>
+      </Animated.View>
+    </TouchableOpacity>
+  );
 };
 
 const Boards = () => {
@@ -157,71 +246,6 @@ const Boards = () => {
     }),
   ).current;
 
-  const renderTaskItem = ({item}: {item: CardInfo}) => {
-    const board = boards.find(({id}) => id === item?.idBoard);
-    return (
-      <Animated.View
-        style={[
-          styles.taskItemContainer,
-          {
-            transform: [{translateX: translateX}],
-          },
-        ]}>
-        <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
-          colors={[colors.blue700, colors.blue300]}
-          style={styles.taskItemBoardContainer}>
-          <Text style={styles.taskItemBoardName}>
-            {truncateText(board?.name as string, 20)}
-          </Text>
-        </LinearGradient>
-        <View style={styles.taskItemTitleContainer}>
-          <Text style={styles.taskItemtitle}>
-            {truncateText(item?.name as string, 20)}
-          </Text>
-        </View>
-      </Animated.View>
-    );
-  };
-  const renderStoryItem = ({item}: {item: MappedBoard}) => {
-    const randomImage =
-      imageArray[Math.floor(Math.random() * imageArray.length)];
-    const bgColor = colorArray[Math.floor(Math.random() * colorArray.length)];
-    return (
-      <TouchableOpacity onPress={onPressStory}>
-        <Animated.View
-          style={[
-            styles.storyItemContainer,
-            {
-              transform: [{translateX: translateCircularX}],
-            },
-          ]}>
-          <View
-            style={[
-              styles.storyItemImageContainer,
-              {
-                backgroundColor: bgColor,
-              },
-            ]}>
-            <Image source={randomImage} style={styles.storyItemImage} />
-          </View>
-          <View
-            style={[
-              styles.storyItemBorder,
-              {
-                borderColor: bgColor,
-              },
-            ]}
-          />
-          <Text style={styles.storyItemTitle}>
-            {truncateText(item?.name as string, 10)}
-          </Text>
-        </Animated.View>
-      </TouchableOpacity>
-    );
-  };
-
   if (isLoading) {
     return <Loader size={'large'} />;
   }
@@ -247,7 +271,9 @@ const Boards = () => {
         <Text style={styles.sectionTitle}>Stories</Text>
         <Animated.FlatList
           data={boards}
-          renderItem={renderStoryItem}
+          renderItem={({item}) =>
+            renderStoryItem({item, onPressStory, translateCircularX, styles})
+          }
           keyExtractor={item => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -257,7 +283,9 @@ const Boards = () => {
         <Text style={styles.sectionTitle}>Recent Tasks</Text>
         <Animated.FlatList
           data={cards}
-          renderItem={renderTaskItem}
+          renderItem={({item}) =>
+            renderTaskItem({item, boards, translateX, styles, colors})
+          }
           keyExtractor={item => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}

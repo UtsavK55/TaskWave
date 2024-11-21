@@ -1,26 +1,19 @@
-import {SafeAreaView} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {View} from 'react-native';
 
-import CustomStatusBar from '@components/customStatusBar';
 import useTheme from '@hooks/useTheme';
 
 const BaseContainer = ({
   children,
-  showStatusBar = true,
-  bgColor = 'white',
+  bgColor,
 }: {
   children: React.ReactNode;
-  showStatusBar?: boolean;
   bgColor?: string;
 }) => {
-  const {layout} = useTheme();
+  const {layout, colors} = useTheme();
   return (
-    <SafeAreaProvider>
-      <CustomStatusBar showStatusBar={showStatusBar} />
-      <SafeAreaView style={[layout.flex_1, {backgroundColor: bgColor}]}>
-        {children}
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <View style={[layout.flex_1, {backgroundColor: bgColor ?? colors.white}]}>
+      {children}
+    </View>
   );
 };
 

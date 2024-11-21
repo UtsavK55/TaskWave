@@ -6,11 +6,12 @@ import {
   Text,
   View,
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
 
 import {IMAGES} from '@constants/imageConstants';
 import {truncateText} from '@helpers';
 import useScalingMetrics from '@hooks/useScalingMetrics';
+
+import FastImage from 'react-native-fast-image';
 
 import {carouselStyles} from './styles';
 

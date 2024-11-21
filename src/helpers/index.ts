@@ -1,8 +1,8 @@
 import {Animated, Platform} from 'react-native';
 
-export const isAndroid = (): boolean => {
-  return Platform.OS === 'android';
-};
+import {API_KEY} from '@network/apiConstant';
+
+export const isAndroid = Platform.OS === 'android';
 
 export const animatedTransform = (
   scale?: Animated.Value,
@@ -38,5 +38,9 @@ export const startAnimation = (
 };
 
 export const truncateText = (text: string, maxLength: number): string => {
-  return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+  return text?.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+};
+
+export const appendAuthParams = (url: string, token: string): string => {
+  return `${url}key=${API_KEY}&token=${token}`;
 };
