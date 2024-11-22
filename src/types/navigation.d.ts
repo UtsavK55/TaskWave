@@ -20,8 +20,6 @@ declare global {
     };
     CARD_DETAILS_SCREEN: {fromScreen: string; cardId: string};
     ADD_BOARD_SCREEN: undefined;
-    SEARCH_SCREEN: undefined;
-    NOTIFICATION_SCREEN: undefined;
     SETTINGS_SCREEN: {boardId: string};
     INVITE_MEMBER_SCREEN: undefined;
   };
