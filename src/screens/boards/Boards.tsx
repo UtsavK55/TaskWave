@@ -207,9 +207,7 @@ const Boards = () => {
   const onPressDrawer = () => {
     drawerNavigation.toggleDrawer();
   };
-  const onPressSearch = () => {
-    boardNavigation.navigate(ROUTES.BOARDS_STACK_SCREEN.SEARCH_SCREEN);
-  };
+
   const onPressBoardCard = (item: MappedBoard) => {
     const {id, name, backgroundImageUrl} = item;
 
@@ -255,9 +253,7 @@ const Boards = () => {
       <Header
         headerText="Home"
         leftNode={<HeaderIcon name="menu" />}
-        rightNode={<HeaderIcon name="search" />}
         handleOnPressLeftNode={onPressDrawer}
-        handleOnPressRightNode={onPressSearch}
       />
 
       <Text style={styles.sectionTitle}>Your Boards</Text>

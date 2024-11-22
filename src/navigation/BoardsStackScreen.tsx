@@ -6,7 +6,6 @@ import Boards from '@screens/boards/Boards';
 import BoardSettings from '@screens/boardSettings/BoardSettings';
 import CardDetails from '@screens/cardDetails/CardDetails';
 import Lists from '@screens/lists/Lists';
-import Search from '@screens/search/Search';
 import InviteMember from '@screens/inviteMember/InviteMember';
 
 const BoardsStackScreen = () => {
@@ -32,10 +31,6 @@ const BoardsStackScreen = () => {
       <BoardsStack.Screen
         name={ROUTES.BOARDS_STACK_SCREEN.SETTINGS_SCREEN}
         component={BoardSettings}
-      />
-      <BoardsStack.Screen
-        name={ROUTES.BOARDS_STACK_SCREEN.SEARCH_SCREEN}
-        component={Search}
       />
       <BoardsStack.Screen
         name={ROUTES.BOARDS_STACK_SCREEN.CARD_DETAILS_SCREEN}

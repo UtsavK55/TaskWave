@@ -49,4 +49,12 @@ declare global {
     CARD_SIZE: number;
     onPress: (item: MappedBoard) => void;
   }
+
+  interface BoardMember {
+    id: string;
+    fullName: string;
+    username: string;
+  }
+
+  type AllBoardMembers = BoardMember[];
 }

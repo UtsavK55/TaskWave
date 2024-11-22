@@ -44,3 +44,13 @@ export const truncateText = (text: string, maxLength: number): string => {
 export const appendAuthParams = (url: string, token: string): string => {
   return `${url}key=${API_KEY}&token=${token}`;
 };
+
+export const getInitials = (name: string) => {
+  const nameParts = name.split(' ');
+  const firstInitial = nameParts[0].charAt(0).toUpperCase(); // First letter of the first name
+  const lastInitial =
+    nameParts.length > 1
+      ? nameParts[nameParts.length - 1].charAt(0).toUpperCase()
+      : ''; // First letter of the last name
+  return firstInitial + (lastInitial ? `${lastInitial}` : ''); // Return initials (e.g. "J.D.")
+};

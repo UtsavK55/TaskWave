@@ -1,0 +1,1 @@
+type Colors = UnionConfiguration['colors'];
