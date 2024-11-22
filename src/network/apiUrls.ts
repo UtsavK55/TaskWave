@@ -98,8 +98,24 @@ export const getMembersOfBoardUrl = (token: string, boardId: string) => {
 };
 
 export const searchMemberUrl = (token: string, searchTerm: string) => {
+  return appendAuthParams(`/1/search/members/?query=${searchTerm}&`, token);
+};
+
+export const deleteMemberUrl = (
+  token: string,
+  boardId: string,
+  memberId: string,
+) => {
+  return appendAuthParams(`/1/boards/${boardId}/members/${memberId}?`, token);
+};
+
+export const addMemberUrl = (
+  token: string,
+  boardId: string,
+  memberId: string,
+) => {
   return appendAuthParams(
-    `https://api.trello.com/1/search/members/?query=${searchTerm}&`,
+    `/1/boards/${boardId}/members/${memberId}?type=normal&`,
     token,
   );
 };
