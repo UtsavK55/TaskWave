@@ -16,14 +16,61 @@ import {addMemberUrl, searchMemberUrl} from '@network/apiUrls';
 
 import {inviteMemberStyles} from './styles';
 
+const renderMemberCard = ({
+  item,
+  onPressAdd,
+  styles,
+  colors,
+}: {
+  item: BoardMember;
+  onPressAdd: (id: string) => void;
+  styles: Record<string, any>;
+  colors: Colors;
+}) => {
+  const {id, fullName, username} = item;
+  const initials = getInitials(fullName);
+  return (
+    <>
+      {id && (
+        <View key={id} style={styles.memberCardContainer}>
+          <Text
+            style={[
+              styles.memberInitials,
+              {
+                backgroundColor:
+                  colorArray[Math.floor(Math.random() * colorArray.length)],
+              },
+            ]}>
+            {initials}
+          </Text>
+          <View style={styles.memberInfoContainer}>
+            <Text style={styles.memberFullName}>
+              {truncateText(fullName, 25)}
+            </Text>
+            <Text style={styles.memberUsername}>
+              {truncateText(username, 25)}
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => onPressAdd(item?.id)}
+            style={styles.addButtonContainer}>
+            <HeaderIcon name="add" size={28} color={colors.fixedblue700} />
+          </TouchableOpacity>
+        </View>
+      )}
+    </>
+  );
+};
+
 const InviteMember = () => {
-  const styles = inviteMemberStyles();
   const {token} = useUserLoginContext();
   const {colors} = useTheme();
   const boardNavigation = useNavigation<BoardsNavigationType>();
   const route =
     useRoute<RouteProp<BoardsScreenParamList, 'INVITE_MEMBER_SCREEN'>>();
   const {boardId} = route?.params;
+
+  const styles = inviteMemberStyles();
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchedMembers, setSearchedMembers] = useState<AllBoardMembers>([]);
@@ -53,42 +100,6 @@ const InviteMember = () => {
     updateData(addMemberUrl(token, boardId, id));
   };
 
-  const renderMemberCard = ({item}: {item: BoardMember}) => {
-    const {id, fullName, username} = item;
-    const initials = getInitials(fullName);
-    return (
-      <>
-        {id && (
-          <View key={id} style={styles.memberCardContainer}>
-            <Text
-              style={[
-                styles.memberInitials,
-                {
-                  backgroundColor:
-                    colorArray[Math.floor(Math.random() * colorArray.length)],
-                },
-              ]}>
-              {initials}
-            </Text>
-            <View style={styles.memberInfoContainer}>
-              <Text style={styles.memberFullName}>
-                {truncateText(fullName, 25)}
-              </Text>
-              <Text style={styles.memberUsername}>
-                {truncateText(username, 25)}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => onPressAdd(item?.id)}
-              style={styles.addButtonContainer}>
-              <HeaderIcon name="add" size={28} color={colors.fixedblue700} />
-            </TouchableOpacity>
-          </View>
-        )}
-      </>
-    );
-  };
-
   return (
     <BaseContainer bgColor={colors.gray50}>
       <Header
@@ -113,7 +124,9 @@ const InviteMember = () => {
 
       <FlatList
         data={searchedMembers}
-        renderItem={renderMemberCard}
+        renderItem={({item}) =>
+          renderMemberCard({item, onPressAdd, styles, colors})
+        }
         ListEmptyComponent={
           <NoDataFound item="member" style={styles.noDataText} />
         }
