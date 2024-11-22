@@ -26,9 +26,7 @@ function App(): React.JSX.Element {
             [ROUTES.BOARDS_STACK_SCREEN.BOARDS_SCREEN]: 'boards',
             [ROUTES.BOARDS_STACK_SCREEN.ADD_BOARD_SCREEN]: 'add-board',
             [ROUTES.BOARDS_STACK_SCREEN.LISTS_SCREEN]: 'lists',
-            [ROUTES.BOARDS_STACK_SCREEN.NOTIFICATION_SCREEN]: 'notification',
             [ROUTES.BOARDS_STACK_SCREEN.SETTINGS_SCREEN]: 'board-settings',
-            [ROUTES.BOARDS_STACK_SCREEN.SEARCH_SCREEN]: 'search',
             [ROUTES.BOARDS_STACK_SCREEN.CARD_DETAILS_SCREEN]: {
               path: 'card/:cardId',
               parse: {

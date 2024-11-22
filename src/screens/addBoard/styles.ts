@@ -40,13 +40,15 @@ export const addBoardStyles = createThemedStyles((theme, scalingMetrics) => {
     },
     list: {...layout.itemsCenter, marginTop: scaleSize(12)},
     buttonText: {
-      ...borders.w_1,
       ...fonts.alignCenter,
       paddingVertical: scaleSize(12),
       marginVertical: scaleSize(12),
       marginHorizontal: scaleSize(40),
       ...borders.rounded_4,
       ...fonts.bold,
+      elevation: 3,
+      shadowOpacity: 0.2,
+      shadowRadius: scaleSize(4),
     },
   });
 });

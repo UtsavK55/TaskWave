@@ -15,7 +15,7 @@ const Loader = ({
 }) => {
   const {colors} = useTheme();
   return (
-    <View style={[styles().container, {backgroundColor: bgColor ?? 'white'}]}>
+    <View style={[styles().container, {backgroundColor: bgColor ?? colors.white}]}>
       <ActivityIndicator
         size={size || 'large'}
         color={color || colors.fixedblue700}

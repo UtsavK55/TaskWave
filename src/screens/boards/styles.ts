@@ -112,9 +112,7 @@ export const boardStyles = createThemedStyles((theme, scalingMetrics) => {
       borderRadius: scaleSize(10),
       ...layout.flex_1,
       ...layout.itemsCenter,
-      borderWidth: scaleSize(1),
-      borderColor: colors.gray100,
-      shadowOpacity: 0.1,
+      shadowOpacity: 0.3,
       shadowRadius: scaleSize(4),
     },
     taskItemBoardContainer: {
@@ -125,7 +123,7 @@ export const boardStyles = createThemedStyles((theme, scalingMetrics) => {
       ...layout.justifyCenter,
     },
     taskItemBoardName: {
-      color: colors.white,
+      color: colors.fixedWhite,
       paddingHorizontal: scaleSize(24),
       fontSize: moderateScale(16),
       fontWeight: 'bold',

@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {createThemedStyles} from '@hooks/useTheme';
 
 export const listStyles = createThemedStyles((theme, scalingMetrics) => {
-  const {backgrounds, layout, fonts, borders} = theme;
+  const {backgrounds, layout, fonts, colors} = theme;
   const {wp, scaleSize, moderateScale} = scalingMetrics;
 
   const styles = StyleSheet.create({
@@ -14,6 +14,12 @@ export const listStyles = createThemedStyles((theme, scalingMetrics) => {
       elevation: 5,
       marginVertical: scaleSize(8),
       borderRadius: scaleSize(8),
+      backgroundColor: colors.white,
+      borderWidth: 1,
+      borderColor: colors.gray100,
+      ...layout.row,
+      ...layout.justifyBetween,
+      ...layout.itemsCenter,
     },
     listContainer: {
       width: wp(80),
@@ -21,15 +27,7 @@ export const listStyles = createThemedStyles((theme, scalingMetrics) => {
   });
 
   return {
-    cardContainer: [
-      styles.cardContainer,
-      backgrounds.white,
-      borders.w_1,
-      borders.gray100,
-      layout.row,
-      layout.justifyBetween,
-      layout.itemsCenter,
-    ],
+    cardContainer: [styles.cardContainer],
     cardTitle: [fonts.black, {padding: scaleSize(12)}],
     imageBg: [layout.flex_1, layout.justifyCenter],
     listContainer: [{margin: scaleSize(12)}, styles.listContainer],
