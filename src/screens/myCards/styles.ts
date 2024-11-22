@@ -64,7 +64,7 @@ export const myCardStyles = createThemedStyles((theme, scalingMetrics) => {
     ],
     cardContainer: [
       styles.cardContainer,
-      backgrounds.fixedWhite,
+      backgrounds.white,
       {
         marginVertical: scaleSize(8),
         marginHorizontal: scaleSize(12),

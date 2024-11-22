@@ -1,6 +1,7 @@
-import {animatedTransform} from '@src/helpers';
-import {createThemedStyles} from '@src/hooks/useTheme';
 import {Animated, StyleSheet} from 'react-native';
+
+import {animatedTransform} from '@helpers';
+import {createThemedStyles} from '@hooks/useTheme';
 
 export const splashStyles = createThemedStyles(
   (theme, scalingMetrics, scale, value, translateY, fadeAnim) => {
@@ -12,14 +13,14 @@ export const splashStyles = createThemedStyles(
         ...layout.flex_1,
         ...layout.justifyCenter,
         ...layout.itemsCenter,
-        backgroundColor: colors.fixedblue700,
+        backgroundColor: colors.blue700,
       },
       view1: {
         backgroundColor: colors.white,
         width: wp(66),
-        height: hp(30),
+        height: wp(66),
         position: 'absolute',
-        borderRadius: scaleSize(120),
+        borderRadius: scaleSize(150),
         transform: animatedTransform(scale),
       },
       imageContainer1: {

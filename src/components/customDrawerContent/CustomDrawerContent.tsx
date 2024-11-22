@@ -55,7 +55,7 @@ const DrawerItem = ({
       <Icon
         name={iconName}
         size={scaleSize(24)}
-        color={isActive ? colors.blue700 : colors.black}
+        color={isActive ? colors.fixedblue700 : colors.black}
       />
       <Text style={[styles.itemTitle, isActive && styles.activeText]}>
         {label}

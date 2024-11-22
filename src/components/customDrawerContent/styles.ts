@@ -5,11 +5,13 @@ import {createThemedStyles} from '@hooks/useTheme';
 export const drawerStyles = createThemedStyles((theme, scalingMetrics) => {
   const {wp, scaleSize, moderateScale} = scalingMetrics;
   const {colors, backgrounds, fonts, layout} = theme;
-  
+
   return StyleSheet.create({
     container: {
       padding: scaleSize(20),
       backgroundColor: colors.blue700,
+      borderBottomWidth:0.5,
+      borderColor:colors.black
     },
     initials: {
       ...fonts.fixedWhite,
@@ -54,7 +56,7 @@ export const drawerStyles = createThemedStyles((theme, scalingMetrics) => {
       marginLeft: scaleSize(10),
     },
     activeText: {
-      color: colors.blue700,
+      color: colors.fixedblue700,
     },
   });
 });

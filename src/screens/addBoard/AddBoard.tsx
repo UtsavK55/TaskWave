@@ -23,7 +23,7 @@ import {addBoardStyles} from './styles';
 const AddBoard = () => {
   const {token} = useUserLoginContext();
   const styles = addBoardStyles();
-  const {colors, borders, fonts} = useTheme();
+  const {colors, backgrounds, fonts} = useTheme();
   const boardNavigation = useNavigation<BoardsNavigationType>();
   const {isLandscape} = useScalingMetrics();
 
@@ -126,8 +126,10 @@ const AddBoard = () => {
         <Pressable onPress={onPressCreateBoard}>
           <Text
             style={[
-              boardName && bgImageId ? fonts.fixedblue700 : fonts.gray200,
-              boardName && bgImageId ? borders.fixedblue700 : borders.gray200,
+              boardName && bgImageId ? fonts.fixedWhite : fonts.gray200,
+              boardName && bgImageId
+                ? backgrounds.fixedblue700
+                : backgrounds.gray50,
               styles.buttonText,
             ]}>
             Create Board

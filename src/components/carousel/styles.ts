@@ -1,5 +1,6 @@
-import {createThemedStyles} from '@src/hooks/useTheme';
 import {StyleSheet} from 'react-native';
+
+import {createThemedStyles} from '@hooks/useTheme';
 
 export const carouselStyles = createThemedStyles((theme, scalingMetrics) => {
   const {colors, layout} = theme;
@@ -20,7 +21,7 @@ export const carouselStyles = createThemedStyles((theme, scalingMetrics) => {
     itemContainer: {
       width: wp(45),
       marginHorizontal: scaleSize(4),
-      backgroundColor: 'white',
+      backgroundColor: colors.white,
       borderRadius: scaleSize(10),
       shadowOpacity: 0.1,
       shadowRadius: 4,

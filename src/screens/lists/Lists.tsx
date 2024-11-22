@@ -306,7 +306,7 @@ const Lists = () => {
             onPress={() => onPressMove(item?.id, item?.idList as string)}>
             <HeaderIcon
               name={'move-up'}
-              color={inputConditions ? colors.gray200 : colors.blue700}
+              color={inputConditions ? colors.gray200 : colors.fixedblue700}
               size={20}
             />
           </Pressable>
@@ -359,7 +359,7 @@ const Lists = () => {
         style={styles.archiveAction}>
         <HeaderIcon
           name="archive"
-          color={addingCardToListId ? colors.gray200 : colors.blue700}
+          color={addingCardToListId ? colors.gray200 : colors.fixedblue700}
         />
       </TouchableOpacity>
     </View>
