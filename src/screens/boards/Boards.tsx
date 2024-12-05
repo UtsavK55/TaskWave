@@ -1,5 +1,5 @@
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useRef, useState} from 'react';
 import {
   Animated,
   Image,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useQuery} from 'react-query';
 
 import BaseContainer from '@components/baseContainer';
 import Header from '@components/header';
@@ -133,7 +134,6 @@ const renderStoryItem = ({
 };
 
 const Boards = () => {
-  const isFocused = useIsFocused();
   const styles = boardStyles();
   const {colors} = useTheme();
   const {hp, wp} = useScalingMetrics();
@@ -141,18 +141,13 @@ const Boards = () => {
   const drawerNavigation = useNavigation<DrawerNavigationType>();
   const boardNavigation = useNavigation<BoardsNavigationType>();
 
-  const [boards, setBoards] = useState<AllBoards>([]);
-  const [cards, setCards] = useState<AllCards>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isStoryVisible, setIsStoryVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(hp(40))).current;
   const translateX = useRef(new Animated.Value(500)).current;
   const translateCircularX = useRef(new Animated.Value(500)).current;
   const storyTime = useRef(new Animated.Value(-wp(100))).current;
 
-  const getAllBoards = async () => {
-    setIsLoading(true);
-
+  const fetchBoardsData = async (token: string) => {
     const allBoardsInfo = await fetchData(allBoardsUrl(token));
     const allBoards: AllBoards = allBoardsInfo.map(
       ({id, name, prefs}: BoardInfo) => ({
@@ -163,7 +158,6 @@ const Boards = () => {
       }),
     );
 
-    // Loop through all boards and fetch card count for each
     const boardsWithCardCount = await Promise.all(
       allBoards.map(async board => {
         const allCardsInfo = await fetchData(
@@ -176,9 +170,10 @@ const Boards = () => {
       }),
     );
 
-    // Update the boards with the cards count
-    setBoards(boardsWithCardCount);
+    return boardsWithCardCount;
+  };
 
+  const fetchCardsData = async (token: string) => {
     const allCardsInfo = await fetchData(getMyCardsUrl(token));
     const allCards: AllCards = allCardsInfo.map(
       ({id, idBoard, name, dateLastActivity}: CardInfo) => ({
@@ -188,21 +183,32 @@ const Boards = () => {
         dateLastActivity,
       }),
     );
-    const sortedCards = allCards.sort((a, b) => {
+
+    return allCards.sort((a, b) => {
       const dateA = new Date(a.dateLastActivity);
       const dateB = new Date(b.dateLastActivity);
-
       return dateB.getTime() - dateA.getTime();
     });
-
-    setCards(sortedCards);
-    setIsLoading(false);
-    animate(slideAnim, translateCircularX, translateX);
   };
 
-  useEffect(() => {
-    getAllBoards();
-  }, [isFocused]);
+  const {data: boards, isLoading: isBoardsLoading} = useQuery<AllBoards>(
+    ['boards', token],
+    () => fetchBoardsData(token),
+    {
+      enabled: !!token,
+    },
+  );
+
+  const {data: cards, isLoading: isCardsLoading} = useQuery(
+    ['cards', token],
+    () => fetchCardsData(token),
+    {
+      enabled: !!token,
+      onSuccess: () => {
+        animate(slideAnim, translateCircularX, translateX);
+      },
+    },
+  );
 
   const onPressDrawer = () => {
     drawerNavigation.toggleDrawer();
@@ -244,7 +250,7 @@ const Boards = () => {
     }),
   ).current;
 
-  if (isLoading) {
+  if (isBoardsLoading || isCardsLoading) {
     return <Loader size={'large'} />;
   }
 
@@ -301,10 +307,7 @@ const Boards = () => {
           <View style={styles.progressContainer}>
             <Animated.View
               style={[styles.progress, {transform: [{translateX: storyTime}]}]}>
-              <Image
-                source={IMAGES.comingSoon}
-                style={styles.comingSoon}
-              />
+              <Image source={IMAGES.comingSoon} style={styles.comingSoon} />
             </Animated.View>
           </View>
         </Animated.View>

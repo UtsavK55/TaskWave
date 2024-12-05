@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {LinkingOptions, NavigationContainer} from '@react-navigation/native';
+import {QueryClient, QueryClientProvider} from 'react-query';
 import Toast from 'react-native-toast-message';
 
 import SplashScreen from '@components/splashScreen';
@@ -10,6 +11,8 @@ import Navigator from '@navigation/Navigator';
 
 function App(): React.JSX.Element {
   const [isSplashScreen, setIsSplahScreen] = useState(true);
+
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     setTimeout(() => {
@@ -41,14 +44,16 @@ function App(): React.JSX.Element {
   };
 
   return (
-    <UserLoginProvider>
-      <ThemeProvider>
-        <NavigationContainer linking={linking}>
-          {isSplashScreen ? <SplashScreen /> : <Navigator />}
-          <Toast />
-        </NavigationContainer>
-      </ThemeProvider>
-    </UserLoginProvider>
+    <QueryClientProvider client={queryClient}>
+      <UserLoginProvider>
+        <ThemeProvider>
+          <NavigationContainer linking={linking}>
+            {isSplashScreen ? <SplashScreen /> : <Navigator />}
+            <Toast />
+          </NavigationContainer>
+        </ThemeProvider>
+      </UserLoginProvider>
+    </QueryClientProvider>
   );
 }
 
