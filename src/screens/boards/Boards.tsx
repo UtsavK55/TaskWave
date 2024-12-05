@@ -18,7 +18,7 @@ import NoDataFound from '@components/noDataFound';
 import Carousel from '@components/carousel';
 
 import {colorArray, ROUTES} from '@constants';
-import {imageArray} from '@constants/imageConstants';
+import {imageArray, IMAGES} from '@constants/imageConstants';
 
 import {useUserLoginContext} from '@contexts/Loginprovider';
 import {startAnimation, truncateText} from '@helpers';
@@ -124,9 +124,9 @@ const renderStoryItem = ({
             },
           ]}
         />
-        <Text style={styles.storyItemTitle}>
+        {/* <Text style={styles.storyItemTitle}>
           {truncateText(item?.name as string, 10)}
-        </Text>
+        </Text> */}
       </Animated.View>
     </TouchableOpacity>
   );
@@ -300,10 +300,12 @@ const Boards = () => {
         <Animated.View style={styles.storyContainer}>
           <View style={styles.progressContainer}>
             <Animated.View
-              style={[
-                styles.progress,
-                {transform: [{translateX: storyTime}]},
-              ]}></Animated.View>
+              style={[styles.progress, {transform: [{translateX: storyTime}]}]}>
+              <Image
+                source={IMAGES.comingSoon}
+                style={styles.comingSoon}
+              />
+            </Animated.View>
           </View>
         </Animated.View>
       )}

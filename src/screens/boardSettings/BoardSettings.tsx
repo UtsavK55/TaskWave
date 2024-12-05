@@ -25,6 +25,7 @@ import {
   deleteMemberUrl,
   getArchiveListUrl,
   getMembersOfBoardUrl,
+  getUserUrl,
 } from '@network/apiUrls';
 
 import {settingStyles} from './styles';
@@ -59,10 +60,12 @@ const renderMemberCard = ({
   item,
   styles,
   onPressRemove,
+  userData,
 }: {
   item: BoardMember;
   styles: Record<string, any>;
   onPressRemove: (id: string) => void;
+  userData: UserDetails;
 }) => {
   const {id, fullName, username} = item;
   const initials = getInitials(fullName);
@@ -82,11 +85,13 @@ const renderMemberCard = ({
         <Text style={styles.info1}>{truncateText(fullName, 25)}</Text>
         <Text style={styles.info2}>{truncateText(username, 25)}</Text>
       </View>
-      <TouchableOpacity
-        onPress={() => onPressRemove(id)}
-        style={styles.removeContainer}>
-        <Text style={styles.remove}>Remove</Text>
-      </TouchableOpacity>
+      {userData.id != item?.id && (
+        <TouchableOpacity
+          onPress={() => onPressRemove(id)}
+          style={styles.removeContainer}>
+          <Text style={styles.remove}>Remove</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -137,6 +142,13 @@ const BoardSettings = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [lists, setLists] = useState<AllLists>([]);
   const [allMembers, setAllMembers] = useState<AllBoardMembers>([]);
+  const [userData, setUserData] = useState<UserDetails>({
+    id: '',
+    email: '',
+    fullName: '',
+    initials: '',
+    username: '',
+  });
 
   const getAllData = useCallback(async () => {
     setIsLoading(true);
@@ -151,6 +163,11 @@ const BoardSettings = () => {
       getMembersOfBoardUrl(token, boardId),
     );
     setAllMembers(allMembersInfo);
+
+    const user = await fetchData(getUserUrl(token));
+    const {id, email, fullName, initials, username} = user;
+    setUserData({id, email, fullName, initials, username});
+
     setIsLoading(false);
   }, [token, boardId]);
 
@@ -224,7 +241,7 @@ const BoardSettings = () => {
         sectionTitle="Board Members"
         data={allMembers}
         renderItem={({item}: {item: BoardMember}) =>
-          renderMemberCard({item, styles, onPressRemove})
+          renderMemberCard({item, styles, onPressRemove, userData})
         }
         ListEmptyComponent={(<NoDataFound item="member" />) as React.ReactNode}
         onPressInvite={onPressInvite}

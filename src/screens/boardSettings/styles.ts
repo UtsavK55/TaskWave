@@ -107,16 +107,18 @@ export const settingStyles = createThemedStyles((theme, scalingMetrics) => {
     sectionTitle: [{color: colors.gray400, fontSize: moderateScale(20)}],
     invite: [
       {
-        borderWidth: scaleSize(1),
-        borderColor: colors.fixedblue700,
+        backgroundColor: colors.fixedblue700,
         textAlign: 'center' as 'center',
         marginHorizontal: scaleSize(20),
         marginVertical: isLandscape() ? scaleSize(10) : scaleSize(20),
         paddingVertical: scaleSize(8),
-        color: colors.fixedblue700,
+        color: colors.fixedWhite,
         borderRadius: scaleSize(4),
         fontWeight: 'bold' as 'bold',
         fontSize: moderateScale(14),
+        elevation: 3,
+        shadowOpacity: 0.4,
+        shadowRadius: scaleSize(4),
       },
     ],
   };

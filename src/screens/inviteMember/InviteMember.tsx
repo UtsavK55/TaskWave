@@ -1,11 +1,19 @@
 import {useEffect, useState} from 'react';
-import {FlatList, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  FlatList,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 
 import BaseContainer from '@components/baseContainer';
 import Header from '@components/header';
 import HeaderIcon from '@components/headerIcon';
 import NoDataFound from '@components/noDataFound';
+import ShowToast from '@components/showToast';
 
 import {colorArray} from '@constants';
 import {useUserLoginContext} from '@contexts/Loginprovider';
@@ -97,7 +105,18 @@ const InviteMember = () => {
   };
 
   const onPressAdd = (id: string) => {
-    updateData(addMemberUrl(token, boardId, id));
+    Alert.alert('Add member', 'Are you sure you want to add this member?', [
+      {text: 'Cancel', style: 'cancel'},
+      {
+        text: 'Add',
+        style: 'default',
+        onPress: async () => {
+          updateData(addMemberUrl(token, boardId, id));
+          onPressBack();
+          ShowToast('success', 'Member added successfully');
+        },
+      },
+    ]);
   };
 
   return (

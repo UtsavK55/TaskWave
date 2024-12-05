@@ -11,6 +11,7 @@ export const IMAGES = {
   target: require('@assets/target.png'),
   tasks: require('@assets/tasks.png'),
   todoList: require('@assets/todoList.png'),
+  comingSoon: require('@assets/comingSoon.png'),
 };
 
 export const imageArray = [
