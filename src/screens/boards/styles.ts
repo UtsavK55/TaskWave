@@ -135,5 +135,6 @@ export const boardStyles = createThemedStyles((theme, scalingMetrics) => {
       fontSize: moderateScale(16),
       paddingHorizontal: scaleSize(10),
     },
+    comingSoon: {width: wp(50), height: wp(50), position: 'absolute', right: 0},
   });
 });
