@@ -108,7 +108,7 @@ export const useDeleteCardMutation = (token: string, boardId: string) => {
   return useMutation(
     (cardId: string) => deleteData(deletCardUrl(token, cardId)),
     {
-      onSuccess: deletedCardId => {
+      onSuccess: (_, deletedCardId) => {
         queryClient.setQueryData(
           [QUERY_KEYS.CARDS, boardId, token],
           (oldData: any) => {
