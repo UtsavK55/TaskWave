@@ -1,5 +1,6 @@
 import {Animated, Platform} from 'react-native';
 
+import ShowToast from '@components/showToast';
 import {API_KEY} from '@network/apiConstant';
 
 export const isAndroid = Platform.OS === 'android';
@@ -59,4 +60,56 @@ export const sortByDateLastActivity = (a: CardInfo, b: CardInfo): number => {
   const dateA = new Date(a.dateLastActivity);
   const dateB = new Date(b.dateLastActivity);
   return dateB.getTime() - dateA.getTime();
+};
+
+export const handleMutationSuccess = (
+  queryClient: any,
+  key: string[],
+  message: string,
+  actionType: 'add' | 'update' | 'delete',
+  data: any,
+) => {
+  return () => {
+    const existingData = queryClient.getQueryData(key);
+
+    switch (actionType) {
+      case 'add': {
+        // Add new item to existing data
+        queryClient.setQueryData(key, (oldData: any) => {
+          if (Array.isArray(oldData)) {
+            return [...oldData, data];
+          }
+          if (oldData) {
+            return {...oldData, ...data};
+          }
+          return data;
+        });
+        break;
+      }
+
+      case 'update': {
+        // Update existing item by matching id
+        if (existingData) {
+          const updatedData = existingData.map((item: any) =>
+            item.id === data.id ? data : item,
+          );
+          queryClient.setQueryData(key, updatedData);
+        }
+        break;
+      }
+
+      case 'delete': {
+        // Remove item by id
+        if (existingData) {
+          const updatedData = existingData.filter(
+            (item: any) => item.id !== data.id,
+          );
+          queryClient.setQueryData(key, updatedData);
+        }
+        break;
+      }
+    }
+
+    ShowToast('success', message);
+  };
 };

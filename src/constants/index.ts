@@ -47,5 +47,6 @@ export const colorArray = [
 export const QUERY_KEYS = {
   BOARDS: 'boards',
   CARDS: 'cards',
+  LISTS: 'lists',
   MY_CARDS: 'myCards',
 };
