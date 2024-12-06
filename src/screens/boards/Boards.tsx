@@ -25,7 +25,7 @@ import {startAnimation, truncateText} from '@helpers';
 import useTheme from '@hooks/useTheme';
 import useScalingMetrics from '@hooks/useScalingMetrics';
 import {useBoardsQuery} from '@store/boards';
-import {useCardsQuery} from '@store/cards';
+import {useMyCardsQuery} from '@store/myCards';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -148,7 +148,7 @@ const Boards = () => {
 
   const {data: boards, isLoading: isBoardsLoading} = useBoardsQuery(token);
 
-  const {data: cards, isLoading: isCardsLoading} = useCardsQuery(token, () =>
+  const {data: cards, isLoading: isCardsLoading} = useMyCardsQuery(token, () =>
     animate(slideAnim, translateCircularX, translateX),
   );
 

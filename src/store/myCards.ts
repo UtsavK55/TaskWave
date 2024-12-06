@@ -5,8 +5,11 @@ import {sortByDateLastActivity} from '@helpers';
 import {fetchData} from '@network/apiMethods';
 import {getMyCardsUrl} from '@network/apiUrls';
 
-export const useCardsQuery = (token: string, onSuccessHandler?: () => void) => {
-  return useQuery([QUERY_KEYS.CARDS, token], () => fetchCardsData(token), {
+export const useMyCardsQuery = (
+  token: string,
+  onSuccessHandler?: () => void,
+) => {
+  return useQuery([QUERY_KEYS.MY_CARDS, token], () => fetchCardsData(token), {
     enabled: !!token,
     onSuccess: onSuccessHandler || (() => {}),
   });
