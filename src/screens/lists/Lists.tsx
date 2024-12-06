@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {
   Alert,
   FlatList,
@@ -12,7 +12,6 @@ import {
 import {
   CommonActions,
   RouteProp,
-  useIsFocused,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -24,84 +23,50 @@ import HeaderIcon from '@components/headerIcon';
 import CustomModal from '@components/customModal';
 import Dropdown from '@components/dropdown';
 import Loader from '@components/loader';
-import ShowToast from '@components/showToast';
 
 import {IMAGES} from '@constants/imageConstants';
 import {ROUTES} from '@constants';
 import {useUserLoginContext} from '@contexts/Loginprovider';
 import {isAndroid} from '@helpers';
 import useTheme from '@hooks/useTheme';
-
-import {addData, deleteData, fetchData, updateData} from '@network/apiMethods';
+import {useCardsQuery} from '@store/cards';
 import {
-  archiveListUrl,
-  deletBoardUrl,
-  deletCardUrl,
-  editListUrl,
-  listCardUrl,
-  newCardUrl,
-  newListUrl,
-  updateCardList,
-} from '@network/apiUrls';
+  useAddNewCardMutation,
+  useAddNewListMutation,
+  useArchiveListMutation,
+  useChangeCardListMutation,
+  useDeleteBoardMutation,
+  useDeleteCardMutation,
+  useListsQuery,
+  useUpdateListMutation,
+} from '@store/lists';
 
 import {listStyles} from './styles';
 
 const Lists = () => {
   const styles = listStyles();
   const {colors, fonts, gutters} = useTheme();
-  const isFocused = useIsFocused();
   const {token} = useUserLoginContext();
   const boardNavigation = useNavigation<BoardsNavigationType>();
   const drwawerNavigation = useNavigation<DrawerNavigationType>();
   const route = useRoute<RouteProp<BoardsScreenParamList, 'LISTS_SCREEN'>>();
   const {boardId, boardName, backgroundImageUrl, fromScreen} = route?.params;
 
-  const [lists, setLists] = useState<AllLists>([]);
-  const [cards, setCards] = useState<AllCards>([]);
+  const {data: lists, isLoading: isLoading} = useListsQuery(token, boardId);
+  const {data: cards, isLoading: isCardLoading} = useCardsQuery(token, boardId);
+
   const [isAddList, setIsAddList] = useState(false);
   const [addingCardToListId, setAddingCardToListId] = useState<string>('');
   const [editListbyId, setEditListById] = useState<string>('');
   const [newList, setNewList] = useState<string>('');
   const [newCard, setNewCard] = useState<string>('');
   const [listTitle, setListTitle] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isCardLoading, setIsCardLoading] = useState<boolean>(true);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [selectedList, setSelectedList] = useState<ListInfo>({
     id: '',
     name: '',
   });
   const [selectedCard, setSelectedCard] = useState<string>('');
-
-  const getListData = useCallback(async () => {
-    setIsLoading(true);
-    const allListsInfo = await fetchData(listCardUrl(token, boardId, 'lists'));
-    const allLists: AllLists = allListsInfo.map(({id, name}: ListInfo) => ({
-      id,
-      name,
-    }));
-    setLists(allLists);
-    setIsLoading(false);
-  }, [token, boardId]);
-
-  const getCardData = useCallback(async () => {
-    setIsCardLoading(true);
-    const allCardsInfo = await fetchData(listCardUrl(token, boardId, 'cards'));
-    const allCards: AllCards = allCardsInfo.map(
-      ({id, idList, name}: CardInfo) => ({
-        id,
-        idList,
-        name,
-      }),
-    );
-    setCards(allCards);
-    setIsCardLoading(false);
-  }, [token, boardId]);
-
-  useEffect(() => {
-    getListData();
-    getCardData();
-  }, [getListData, getCardData, isFocused]);
 
   const cardsArr = useMemo(() => {
     return (listId: string) => cards.filter(({idList}) => idList === listId);
@@ -110,6 +75,37 @@ const Lists = () => {
   const inputConditions = useMemo(() => {
     return addingCardToListId || editListbyId || isAddList;
   }, [addingCardToListId, editListbyId, isAddList]);
+
+  const {mutateAsync: addList} = useAddNewListMutation(token, boardId);
+
+  const {mutateAsync: addCard} = useAddNewCardMutation(
+    token,
+    addingCardToListId,
+    boardId,
+  );
+
+  const {mutateAsync: updateList} = useUpdateListMutation(
+    token,
+    editListbyId,
+    boardId,
+  );
+
+  const {mutateAsync: deleteCard} = useDeleteCardMutation(token, boardId);
+
+  const {mutateAsync: deleteBoard} = useDeleteBoardMutation(
+    token,
+    boardId,
+    boardNavigation,
+  );
+
+  const {mutateAsync: archiveList} = useArchiveListMutation(token, boardId);
+
+  const {mutateAsync: changeList} = useChangeCardListMutation(
+    token,
+    selectedCard,
+    selectedList?.id,
+    boardId,
+  );
 
   // Actions, Navigation handlers and Event handlers
 
@@ -154,18 +150,15 @@ const Lists = () => {
 
   const onPressCheck = async () => {
     if (isAddList && newList) {
-      await addData(newListUrl(token, newList, boardId));
-      getListData();
+      await addList(newList);
       setNewList('');
       setIsAddList(false);
     } else if (editListbyId && listTitle) {
-      await updateData(editListUrl(token, listTitle, editListbyId));
-      getListData();
+      await updateList(listTitle);
       setListTitle('');
       setEditListById('');
     } else if (newCard && addingCardToListId) {
-      await addData(newCardUrl(token, newCard, addingCardToListId));
-      getCardData();
+      await addCard(newCard);
       setNewCard('');
       setAddingCardToListId('');
     }
@@ -205,8 +198,7 @@ const Lists = () => {
             text: 'Archive',
             style: 'destructive',
             onPress: async () => {
-              await updateData(archiveListUrl(token, listId, true));
-              getListData();
+              archiveList(listId);
             },
           },
         ],
@@ -242,8 +234,7 @@ const Lists = () => {
     setIsVisible(false);
   };
   const onPressModalCheck = async () => {
-    await updateData(updateCardList(token, selectedCard, selectedList?.id));
-    getCardData();
+    await changeList();
     setIsVisible(false);
   };
 
@@ -255,9 +246,7 @@ const Lists = () => {
           text: 'Delete',
           style: 'destructive',
           onPress: async () => {
-            await deleteData(deletCardUrl(token, id));
-            getCardData();
-            ShowToast('success', 'Card deleted successfully');
+            await deleteCard(id);
           },
         },
       ]);
@@ -271,9 +260,7 @@ const Lists = () => {
         text: 'Delete',
         style: 'destructive',
         onPress: async () => {
-          await deleteData(deletBoardUrl(token, boardId));
-          boardNavigation.popToTop();
-          ShowToast('success', 'Board deleted successfully');
+          await deleteBoard();
         },
       },
     ]);
