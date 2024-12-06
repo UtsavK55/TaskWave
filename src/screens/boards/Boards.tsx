@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useQuery} from 'react-query';
 
 import BaseContainer from '@components/baseContainer';
 import Header from '@components/header';
@@ -25,8 +24,8 @@ import {useUserLoginContext} from '@contexts/Loginprovider';
 import {startAnimation, truncateText} from '@helpers';
 import useTheme from '@hooks/useTheme';
 import useScalingMetrics from '@hooks/useScalingMetrics';
-import {fetchData} from '@network/apiMethods';
-import {allBoardsUrl, getMyCardsUrl, listCardUrl} from '@network/apiUrls';
+import {useBoardsQuery} from '@store/boards';
+import {useCardsQuery} from '@store/cards';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -147,67 +146,10 @@ const Boards = () => {
   const translateCircularX = useRef(new Animated.Value(500)).current;
   const storyTime = useRef(new Animated.Value(-wp(100))).current;
 
-  const fetchBoardsData = async (token: string) => {
-    const allBoardsInfo = await fetchData(allBoardsUrl(token));
-    const allBoards: AllBoards = allBoardsInfo.map(
-      ({id, name, prefs}: BoardInfo) => ({
-        id,
-        name,
-        backgroundImageUrl: prefs?.backgroundImageScaled?.[2]?.url,
-        cardsNo: 0, // Initialize cardsNo as 0
-      }),
-    );
+  const {data: boards, isLoading: isBoardsLoading} = useBoardsQuery(token);
 
-    const boardsWithCardCount = await Promise.all(
-      allBoards.map(async board => {
-        const allCardsInfo = await fetchData(
-          listCardUrl(token, board.id, 'cards'),
-        );
-        return {
-          ...board,
-          cardsNo: allCardsInfo?.length,
-        };
-      }),
-    );
-
-    return boardsWithCardCount;
-  };
-
-  const fetchCardsData = async (token: string) => {
-    const allCardsInfo = await fetchData(getMyCardsUrl(token));
-    const allCards: AllCards = allCardsInfo.map(
-      ({id, idBoard, name, dateLastActivity}: CardInfo) => ({
-        id,
-        idBoard,
-        name,
-        dateLastActivity,
-      }),
-    );
-
-    return allCards.sort((a, b) => {
-      const dateA = new Date(a.dateLastActivity);
-      const dateB = new Date(b.dateLastActivity);
-      return dateB.getTime() - dateA.getTime();
-    });
-  };
-
-  const {data: boards, isLoading: isBoardsLoading} = useQuery<AllBoards>(
-    ['boards', token],
-    () => fetchBoardsData(token),
-    {
-      enabled: !!token,
-    },
-  );
-
-  const {data: cards, isLoading: isCardsLoading} = useQuery(
-    ['cards', token],
-    () => fetchCardsData(token),
-    {
-      enabled: !!token,
-      onSuccess: () => {
-        animate(slideAnim, translateCircularX, translateX);
-      },
-    },
+  const {data: cards, isLoading: isCardsLoading} = useCardsQuery(token, () =>
+    animate(slideAnim, translateCircularX, translateX),
   );
 
   const onPressDrawer = () => {

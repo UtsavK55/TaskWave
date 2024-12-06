@@ -16,6 +16,7 @@
       "@network/*": ["src/network/*"],
       "@storage": ["src/storage"],
       "@storage/*": ["src/storage/*"],
+      "@store/*": ["src/store/*"],
       "@theme/*": ["src/theme/*"],
       "@types": ["src/types"],
       "@types/*": ["src/types/*"]

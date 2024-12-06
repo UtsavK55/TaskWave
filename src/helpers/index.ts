@@ -54,3 +54,9 @@ export const getInitials = (name: string) => {
       : ''; // First letter of the last name
   return firstInitial + (lastInitial ? `${lastInitial}` : ''); // Return initials (e.g. "J.D.")
 };
+
+export const sortByDateLastActivity = (a: CardInfo, b: CardInfo): number => {
+  const dateA = new Date(a.dateLastActivity);
+  const dateB = new Date(b.dateLastActivity);
+  return dateB.getTime() - dateA.getTime();
+};
