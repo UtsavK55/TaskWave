@@ -1,10 +1,11 @@
 import {useQuery} from 'react-query';
 
+import {QUERY_KEYS} from '@constants';
 import {fetchData} from '@network/apiMethods';
 import {allBoardsUrl, listCardUrl} from '@network/apiUrls';
 
 export const useBoardsQuery = (token: string) => {
-  return useQuery(['boards', token], () => fetchBoardsData(token), {
+  return useQuery([QUERY_KEYS.BOARDS, token], () => fetchBoardsData(token), {
     enabled: !!token,
   });
 };

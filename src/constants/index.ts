@@ -44,3 +44,7 @@ export const colorArray = [
   '#034ef2',
 ];
 
+export const QUERY_KEYS = {
+  BOARDS: 'boards',
+  CARDS: 'cards',
+};
